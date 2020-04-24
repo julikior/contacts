@@ -12,6 +12,8 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.cucumber.datatable.DataTable;
 
+import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
+
 public class CreateTaskSteps {
 	@Inject
 	CreateTaskPage ctPage;
@@ -31,16 +33,15 @@ public class CreateTaskSteps {
 		List<String> all_elements = new ArrayList<String>();
 		all_elements = ctPage.getLabelText();
 		List<String> list = resData.asList(String.class);
-		for (int i = 0; i < list.size(); i++) {
-			Assert.assertEquals(all_elements.get(i), list.get(i));
-		}
+		assertReflectionEquals("Incorrect field names", all_elements, list);
 	}
 
 	@When("user enters the task details {string},{string},{string}")
 	public void user_enters_the_task_details(String arg1, String arg2, String arg3) {
-		ctPage.getTaskName().sendKeys(arg1);
+		/*ctPage.getTaskName().sendKeys(arg1);
 		ctPage.getTaskDesc().sendKeys(arg2);
-		ctPage.getHyperlink().sendKeys(arg3);
+		ctPage.getHyperlink().sendKeys(arg3);*/
+		ctPage.fillTaskInfo(arg1, arg2, arg3);
 	}
 
 	@When("clicks on Create Task button")

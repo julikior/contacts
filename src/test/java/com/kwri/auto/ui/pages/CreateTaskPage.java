@@ -114,6 +114,10 @@ public class CreateTaskPage extends BasePage {
 	@FindBy(xpath = deleteBtn)
 	public WebElement btn_delete;
 
+	private static final String taskCreatedMessage = "//*[contains(text(), 'Task successfully created')]";
+	@FindBy(xpath = taskCreatedMessage)
+	private WebElement msg_taskCreated;
+
 	public void clickContact() {
 		common.waitToDisappear(10, label_popupText);
 		common.waitForElement(10, link_firstContact);
@@ -159,10 +163,19 @@ public class CreateTaskPage extends BasePage {
 	}
 
 	public WebElement getTaskName() {
+		common.waitForElement(10, txtbx_taskName);
 		return txtbx_taskName;
 	}
 
+	public void fillTaskInfo(String taskName, String taskDescription, String taskLink) {
+		//common.waitForElement(10, txtbx_taskName);
+		txtbx_taskName.sendKeys(taskName);
+		txtbx_taskDesc.sendKeys(taskDescription);
+		txtbx_hyperLink.sendKeys(taskLink);
+	}
+
 	public WebElement getTaskDesc() {
+		//common.waitForElement(10, txtbx_taskDesc);
 		return txtbx_taskDesc;
 	}
 
@@ -177,16 +190,16 @@ public class CreateTaskPage extends BasePage {
 
 	public void verifyTask(String taskName) {
 		// wait for task list to load
-		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.xpath("styles__task_list_col___1uHk4")));
 
+
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath(taskCreatedMessage)));
+		Assert.assertEquals(msg_taskCreated.getText(), "Task successfully created");
+
+		//Task is present in the list
 		//verify task is added to time line
-		List<WebElement> taskList = world.driver
-				.findElements(By.xpath("//h4[@class='txt-h4 styles__task-title-head___3MAXK d-inline-block']"));
-		for (int i = 0; i < taskList.size(); i++) {
-			System.out.println("task list item : " + i + " = " + taskList.get(i).getText());
-			if (taskList.get(i).getText() == taskName)
-				System.out.println("Task with name : " + taskList.get(i).getText() + " successfully created");
-		}
+		/*List<WebElement> taskList = world.driver
+				.findElements(By.xpath("//h4[@class='txt-h4 styles__task-title-head___3MAXK d-inline-block']"));*/
+
 	}
 }

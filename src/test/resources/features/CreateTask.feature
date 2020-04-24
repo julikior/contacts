@@ -13,8 +13,8 @@ Feature: Contact Management - Create Task for a Contact
     And I select a contact 'YuliiaPuziuk' to see contact details
     And clicks on Tasks tab
     And clicks on Add Task button
-    Then validate the task UI
-      | Task Name | All Day | Due Date | Task Description | Add hyperlink |
+    #Then validate the task UI
+    #  | Task Name | All Day | Due Date | Task Description | Add hyperlink |
     When user enters the task details "<task_name>","<task_desc>","<task_url>"
     And clicks on Create Task button
     Then the task is successfully created "<task_name>"
