@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="-1" guice-stage="DEVELOPMENT" name="Failed suite [Test-method Suite]">
+  <test name="Test-method test(failed)">
+    <classes>
+      <class name="com.kwri.ContactMgmt.ui.PerformanceTest.ParallelTestGCP">
+        <methods>
+          <include name="CreateContactTestGCP"/>
+        </methods>
+      </class> <!-- com.kwri.ContactMgmt.ui.PerformanceTest.ParallelTestGCP -->
+    </classes>
+  </test> <!-- Test-method test(failed) -->
+</suite> <!-- Failed suite [Test-method Suite] -->
