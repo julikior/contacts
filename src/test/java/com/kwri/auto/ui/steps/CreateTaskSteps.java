@@ -38,9 +38,6 @@ public class CreateTaskSteps {
 
 	@When("user enters the task details {string},{string},{string}")
 	public void user_enters_the_task_details(String arg1, String arg2, String arg3) {
-		/*ctPage.getTaskName().sendKeys(arg1);
-		ctPage.getTaskDesc().sendKeys(arg2);
-		ctPage.getHyperlink().sendKeys(arg3);*/
 		ctPage.fillTaskInfo(arg1, arg2, arg3);
 	}
 
@@ -50,9 +47,7 @@ public class CreateTaskSteps {
 	}
 
 	@Then("the task is successfully created {string}")
-	public void the_task_is_successfully_created(String arg1) {
-//		String taskName = ctPage.verifyTask();
-		ctPage.verifyTask(arg1);
-		//Assert.assertEquals(arg1, taskName);
+	public void the_task_is_successfully_created(String taskName) {
+		ctPage.verifyTaskName(taskName);
 	}
 }
