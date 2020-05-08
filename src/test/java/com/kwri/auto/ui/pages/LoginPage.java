@@ -39,7 +39,7 @@ public class LoginPage extends BasePage {
 	@FindBy(xpath = "//a[@href='/command/contacts']")
 	private WebElement contactsApp;
 
-	@FindBy(xpath = "//img[contains(@class,'avatar--large')]")
+	@FindBy(xpath = "//img[contains(@src,'https://avatar.kwconnect.com/556397.jpeg')]")
 	private WebElement btn_profile;
 
 	@FindBy(xpath = "//div[contains(text(),'Log out')]")

@@ -3,6 +3,7 @@ package com.kwri.auto.ui.pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.google.inject.Inject;
@@ -87,6 +88,33 @@ public class AddContactModal extends BasePage {
 	@FindBy(xpath = "//span[text()='Close']")
 	private WebElement btn_close;
 
+	@FindBy(xpath = "//div[@class='overlay']")
+	private WebElement zone_overlay;
+
+	@FindBy(xpath = "//div[text()='Add More Information']/../span")
+	private WebElement add_more_info;
+
+	@FindBy(xpath = "//h4[text()='Additional Contact Information']/../span")
+	private WebElement additional_contact_info;
+
+	@FindBy(xpath = "//h4[text()='About']/../span")
+	private WebElement icon_about;
+
+	@FindBy(xpath = "//div[contains(text(),'This email is already in use by another contact')]")
+	private WebElement error_message;
+
+	@FindBy(xpath = "//div[contains(text(),'Error')]")
+	private WebElement error_email;
+
+	@FindBy(xpath = "//h4[contains(text(),'Sales Pipeline')]")
+	private WebElement caret_SalesPipeline;
+
+	@FindBy(xpath = "//*[contains(text(),'Select Lead Source')]")
+	private WebElement drpdwn_leadSource;
+
+	@FindBy(xpath = "//label[text()='Birthday']//following-sibling::div[1]//*[contains(text(),'Month')]")
+	private WebElement select_MonthOfBirthday;
+
 	public WebElement getBtn_close() {
 		return btn_close;
 	}
@@ -95,11 +123,12 @@ public class AddContactModal extends BasePage {
 		return modal_AddEditContact;
 	}
 
-	public WebElement getTxt_fullName() {
+	public WebElement fillTxt_fullName() {
 		return txt_fullName;
 	}
 
-	public WebElement getTxt_addLegalName() {
+	public WebElement clickTxt_addLegalName() {
+		common.waitAndClick(30, txt_addLegalName);
 		return txt_addLegalName;
 	}
 
@@ -163,12 +192,48 @@ public class AddContactModal extends BasePage {
 		return input_customField;
 	}
 
-	public WebElement getBtn_createContact() {
+	public WebElement clickBtn_createContact() {
 		return btn_createContact;
 	}
 
-	public WebElement getBtn_cancel() {
+	public WebElement clickBtn_cancel() {
 		return btn_cancel;
 	}
 
+	public WebElement clickzone_overlay() {
+		wait.until(ExpectedConditions.invisibilityOf(zone_overlay));
+		return zone_overlay;
+	}
+
+	public WebElement clickAddMoreInfo() {
+		return add_more_info;
+	}
+
+	public WebElement clickAdditionalContactInfo() {
+		return additional_contact_info;
+	}
+
+	public WebElement clickAbout() {
+		return icon_about;
+	}
+
+	public WebElement getErrorMessage() {
+		return error_message;
+	}
+
+	public WebElement getErrorEmail() {
+		return error_email;
+	}
+
+	public WebElement clickSalesPipeline() {
+		return caret_SalesPipeline;
+	}
+
+	public WebElement leadSourceDropDown() {
+		return drpdwn_leadSource;
+	}
+
+	public WebElement select_MonthOfBirthday() {
+		return select_MonthOfBirthday;
+	}
 }

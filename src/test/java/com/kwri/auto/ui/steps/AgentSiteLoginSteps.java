@@ -65,8 +65,8 @@ public class AgentSiteLoginSteps extends BasePage  {
 	public void i_fill_in_Add_Contacts_Modal_with_following_data() {
 		
 		// Full Name
-		wait.until(ExpectedConditions.visibilityOf(addContact.getTxt_fullName()));
-		addContact.getTxt_fullName().sendKeys("First Last");
+		wait.until(ExpectedConditions.visibilityOf(addContact.fillTxt_fullName()));
+		addContact.fillTxt_fullName().sendKeys("First Last");
 
 		// Primary Email Address
 		addContact.getTxt_primaryEmail().sendKeys(CreateRandomEmail());
@@ -77,12 +77,8 @@ public class AgentSiteLoginSteps extends BasePage  {
 	public void fill_the_form_with_emailIUse_and_password(String string, String string2) {
 		wait.until(ExpectedConditions.visibilityOf(agentSitePage.gettxt_FirstName()));
 		agentSitePage.gettxt_FirstName().sendKeys(string);
-		
 		agentSitePage.gettxt_LastName().sendKeys(string2);
-
 		agentSitePage.gettxt_EmailAddress().sendKeys(CreateRandomEmail());
-
-		
 		agentSitePage.gettxt_Password().sendKeys(FileReaderManager.getInstance().getConfigReader().getPropertyValue("consumerPassword"));
 	}
 	

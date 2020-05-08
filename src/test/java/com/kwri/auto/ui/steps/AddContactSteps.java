@@ -1,5 +1,6 @@
 package com.kwri.auto.ui.steps;
 
+import com.google.common.base.Supplier;
 import com.google.inject.Inject;
 import com.kwri.auto.ui.di.World;
 import com.kwri.auto.ui.methods.Common;
@@ -22,6 +23,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class AddContactSteps extends BasePage {
+
     @Inject
     public AddContactSteps(World world) {
         super(world);
@@ -33,9 +35,6 @@ public class AddContactSteps extends BasePage {
     @Inject
     AddContactModal addContact;
 
-    @Inject
-    AgentSitePage agentSitePage;
-
     Common common = new Common(world.driver);
     WebDriverWait wait = new WebDriverWait(world.driver, 10);
     Actions actions;
@@ -46,42 +45,42 @@ public class AddContactSteps extends BasePage {
 
     @When("^I click on 'Add new contact' button$")
     public void i_click_on_Add_new_contact_button() throws Throwable {
-        wait.until(ExpectedConditions.visibilityOf(contactsHome.getbtn_addNewContact()));
-        contactsHome.getbtn_addNewContact().click();
+        wait.until(ExpectedConditions.visibilityOf(contactsHome.clickbtn_addNewContact()));
+        contactsHome.clickbtn_addNewContact().click();
     }
 
     @When("^I create user wih email$")
     public void i_create_user_with_email() {
         //Full Name
-        addContact.getTxt_fullName().click();
-        nameValue = "AutoUser " + RandomStringUtils.random(5, true, false);
-        email = "AutoUser" + RandomStringUtils.random(5, true, false) + "@test.com";
-        addContact.getTxt_fullName().sendKeys(nameValue);
+        addContact.fillTxt_fullName().click();
+        nameValue = "testtest " + RandomStringUtils.random(5, true, false);
+        email = "testtest" + RandomStringUtils.random(5, true, false) + "@test.com";
+        addContact.fillTxt_fullName().sendKeys(nameValue);
         addContact.getTxt_primaryEmail().sendKeys(email);
     }
 
     @When("^I create user wih the same email$")
     public void i_create_user_with_the_same_email() {
         //Full Name
-        addContact.getTxt_fullName().click();
+        addContact.fillTxt_fullName().click();
         nameValue = "AutoUser " + RandomStringUtils.random(5, true, false);
-        addContact.getTxt_fullName().sendKeys(nameValue);
+        addContact.fillTxt_fullName().sendKeys(nameValue);
         addContact.getTxt_primaryEmail().sendKeys(email);
     }
 
     @Then("I verify that 'This email is already in use' error is displayed")
     public void i_verify_email_in_use_error(){
-        Assert.assertTrue("The error message is not displayed", world.driver
-                .findElement(By.xpath("//div[contains(text(),'This email is already in use by another contact')]")).isDisplayed());
+        Assert.assertTrue("The error message is not displayed",
+                addContact.getErrorMessage().isDisplayed());
         addContact.getBtn_close().click();
     }
 
     @When("^Enter details on add new contact form$")
     public void enter_details_on_form_as() {
         //Full Name
-        addContact.getTxt_fullName().click();
+        addContact.fillTxt_fullName().click();
         nameValue = "AutoUser " + RandomStringUtils.random(5, true, false);
-        addContact.getTxt_fullName().sendKeys(nameValue);
+        addContact.fillTxt_fullName().sendKeys(nameValue);
 
         /**
          //Legal Name
@@ -115,18 +114,16 @@ public class AddContactSteps extends BasePage {
 
     @When("^I click on 'Save Contact' button$")
     public void i_click_on_Save_Contact_button() {
-        addContact.getBtn_createContact().click();
-        wait.until(ExpectedConditions.invisibilityOf(world.driver.findElement(By.xpath("//div[@class='overlay']"))));
+        addContact.clickBtn_createContact().click();
     }
 
     @When("^I click on 'Cancel' button$")
     public void i_click_on_Cancel_button() {
-        addContact.getBtn_cancel().click();
+        addContact.clickBtn_cancel().click();
     }
 
     @Then("^I verify that the a new contact is added \"([^\"]*)\" to the contact list$")
-    public void i_verify_that_the_a_new_contact_is_added_to_the_contact_list(String shouldExist) throws Throwable {
-        System.out.println("yaha hai ..  " + nameValue);
+    public void i_verify_that_the_a_new_contact_is_added_to_the_contact_list(String shouldExist) {
         contactsHome.verifyContactExists(nameValue, Boolean.parseBoolean(shouldExist));
     }
 
@@ -140,22 +137,20 @@ public class AddContactSteps extends BasePage {
     @When("^I select a stage as captured$")
     public void i_select_a_stage_as_captured() {
         //click and expand - Sales Pipeline
-        world.driver.findElement(By.xpath("//h4[contains(text(),'Sales Pipeline')]")).click();
+        addContact.clickSalesPipeline().click();
         wait.until(ExpectedConditions.elementToBeClickable(addContact.getCheckbox_stage()));
         addContact.getCheckbox_stage().click();
     }
 
     @When("^I select a lead source \"([^\"]*)\"$")
     public void i_select_a_lead_source(String leadSource) {
-        WebElement leadSourceDropDown = world.driver
-                .findElement(By.xpath("(//div[@class='css-1pcexqc-container select'])[13]"));
-        leadSourceDropDown.click();
+        addContact.leadSourceDropDown().click();
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        leadSourceDropDown.findElement(By.xpath("./div[2]/div")).click();
+        addContact.leadSourceDropDown().click();
     }
 
     @When("^I select a system tag \"([^\"]*)\"$")
@@ -238,9 +233,9 @@ public class AddContactSteps extends BasePage {
         List<List<String>> list = dataTable.asLists(String.class);
 
         // Full Name
-        addContact.getTxt_fullName().click();
+        addContact.fillTxt_fullName().click();
         nameValue = list.get(0).get(1) + RandomStringUtils.random(5, true, false);
-        addContact.getTxt_fullName().sendKeys(nameValue);
+        addContact.fillTxt_fullName().sendKeys(nameValue);
 
         //Primary Email Address
         addContact.getTxt_primaryEmail().click();
@@ -251,10 +246,10 @@ public class AddContactSteps extends BasePage {
         addContact.getTxt_primaryPhoneNumber().sendKeys(list.get(2).get(1));
 
         //Add More Info
-        world.driver.findElement(By.xpath("//div[text()='Add More Information']/../span")).click();
+        addContact.clickAddMoreInfo().click();
 
         //click and expand - additional cont info
-        world.driver.findElement(By.xpath("//h4[text()='Additional Contact Information']/../span")).click();
+        addContact.clickAdditionalContactInfo().click();
 
         //Preferred Method of Contact
         wait.until(ExpectedConditions.elementToBeClickable(addContact.getRadio_preferredMethod()));
@@ -287,12 +282,12 @@ public class AddContactSteps extends BasePage {
         addContact.getTxt_socialProfile().sendKeys(nameValue);
 
         //click and expand - About
-        world.driver.findElement(By.xpath("//h4[text()='About']/../span")).click();
+        addContact.clickAbout().click();
 
         //Legal Name
-        contactsHome.scrollElementIntoView(addContact.getTxt_addLegalName());
-        addContact.getTxt_addLegalName().click();
-        addContact.getTxt_addLegalName().sendKeys(list.get(8).get(1));
+        contactsHome.scrollElementIntoView(addContact.clickTxt_addLegalName());
+        addContact.clickTxt_addLegalName().click();
+        addContact.clickTxt_addLegalName().sendKeys(list.get(8).get(1));
 
         //Description
         wait.until(ExpectedConditions.elementToBeClickable(addContact.getTxt_description()));
@@ -304,9 +299,9 @@ public class AddContactSteps extends BasePage {
     public void i_fill_in_Add_Contacts_Modal_with_invalid_phone_number(String invalidPhone) throws Exception {
 
         // Full Name
-        addContact.getTxt_fullName().click();
+        addContact.fillTxt_fullName().click();
         nameValue = "AutoUser " + RandomStringUtils.random(5, true, false);
-        addContact.getTxt_fullName().sendKeys(nameValue);
+        addContact.fillTxt_fullName().sendKeys(nameValue);
 
         //Primary Invalid Phone Number
         common.waitAndSendText(10, addContact.getTxt_primaryPhoneNumber(), invalidPhone);
@@ -315,15 +310,15 @@ public class AddContactSteps extends BasePage {
 
     @When("I click create contact button")
     public void i_click_create_contact_button(){
-        addContact.getBtn_createContact().click();
+        addContact.clickBtn_createContact().click();
     }
 
     @When("I fill in Add Contacts Modal with invalid email {string}")
     public void i_fill_in_Add_Contacts_Modal_with_invalid_primary_email(String invalidEmail) throws Exception {
         // Full Name
-        addContact.getTxt_fullName().click();
+        addContact.fillTxt_fullName().click();
         nameValue = "AutoUser " + RandomStringUtils.random(5, true, false);
-        addContact.getTxt_fullName().sendKeys(nameValue);
+        addContact.fillTxt_fullName().sendKeys(nameValue);
 
         //Primary Invalid Email Address
 
@@ -335,8 +330,8 @@ public class AddContactSteps extends BasePage {
     @Then("I verify that email is invalid")
     public void i_verify_that_email_is_invalid () throws Exception{
         Thread.sleep(1000);
-        Assert.assertTrue("The error message is not displayed", world.driver.findElement(By.xpath("//div[contains(text(),'Error')]")).isDisplayed());
-
+        Assert.assertTrue("The error message is not displayed",
+                addContact.getErrorEmail().isDisplayed());
         addContact.getBtn_close().click();
 
     }
@@ -354,15 +349,15 @@ public class AddContactSteps extends BasePage {
     @When("^I select a date of birth$")
     public void i_select_a_date_of_birth() {
         // month
-        world.driver.findElements(By.cssSelector("#dateSelect")).get(0)
-                .findElements(By.cssSelector(".select__indicator")).get(0).click();
-        world.driver.findElements(By.xpath("//div[contains(@id, 'react-select-15')]")).get(1).click();
+       addContact.select_MonthOfBirthday().click();
+       //world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[1]/div/div[2]/div")).get(1).click();
+
 
 
         // date
         world.driver.findElements(By.cssSelector("#dateSelect")).get(0)
                 .findElements(By.cssSelector(".select__indicator")).get(1).click();
-        world.driver.findElements(By.xpath("//div[contains(@id, 'react-select-16')]")).get(1).click();
+        world.driver.findElements(By.xpath("//*[starts-with(@id, 'react-select-14-input')]")).get(1).click();
 
 
         // year

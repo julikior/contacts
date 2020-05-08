@@ -40,7 +40,7 @@ public class ContactsDetailPage extends BasePage {
 	@FindBy(xpath = "//h5[contains(text(),'Viewed a New Listing')]")
 	private WebElement lbl_ViewedNewListing;
 
-	@FindBy(xpath = "//p[text()='Add Activity']")
+	@FindBy(xpath = "//div[@id='activityModal']")
 	private WebElement link_AddActivity;
 
 	@FindBy(xpath = "//div[@class='checkbox-wrapper']/child::input")
@@ -49,39 +49,40 @@ public class ContactsDetailPage extends BasePage {
 	private WebElement chbox_MarkAsLead;
 
 	@FindBy(xpath = "//*[@id=\"contactIntro\"]/div[2]/span[2]/span")
-
-	//span[contains(@class,'icon--edit icon--medium text')]
 	private WebElement span_EditIcon;
 
-	public WebElement getIcon_archive() { return icon_archive; }
+	@FindBy(xpath = "//*[contains(text(), 'Timeline')]//parent::div")
+	private WebElement tab_Timeline;
 
-	public WebElement getLink_AddActivity() { return link_AddActivity; }
+	public WebElement clickIcon_archive() { return icon_archive; }
 
-	public WebElement getlbl_ViewedNewListing() {
+	public WebElement clickLink_AddActivity() { return link_AddActivity; }
+
+	public WebElement clicklbl_ViewedNewListing() {
 		return lbl_ViewedNewListing;
 	}
 
-	public WebElement getspan_EditIcon() {
+	public WebElement clickspan_EditIcon() {
 		return span_EditIcon;
 	}
 
-	public WebElement getchbox_MarkAsLead() {
+	public WebElement clickchbox_MarkAsLead() {
 		return chbox_MarkAsLead;
 	}
 
-	public WebElement getlbl_SourceChanged() {
+	public WebElement clicklbl_SourceChanged() {
 		return lbl_SourceChanged;
 	}
 
-	public WebElement getlbl_LoggedIntoAgentSite() {
+	public WebElement clicklbl_LoggedIntoAgentSite() {
 		return lbl_LoggedIntoAgentSite;
 	}
 
-	public WebElement getLink_addNeighborhoods() {
+	public WebElement clickLink_addNeighborhoods() {
 		return link_addNeighborhoods;
 	}
 
-	public WebElement getTxt_neighborhoodSearch() {
+	public WebElement clickTxt_neighborhoodSearch() {
 		return txt_neighborhoodSearch;
 	}
 
@@ -93,13 +94,12 @@ public class ContactsDetailPage extends BasePage {
 		common.waitAndClick(30, span_EditIcon);
 	}
 
-	public void clickTimelineTab(TimelineItems itemName) {
-		List<WebElement> timelineMenu = world.driver.findElements(
-				By.xpath("//div[contains(@class,'options-toggle__option')]/div[text()='" + itemName + "']"));
-	}
+	/*public void WebElement clickTimelineTab() {
+		common.waitForElement(10, tab_Timeline);
+	}*/
 
 	public void clickAddActivityLink () {
-		this.wait.until(ExpectedConditions.visibilityOf(getLink_AddActivity()));
-		this.getLink_AddActivity().click();
+		this.wait.until(ExpectedConditions.visibilityOf(clickLink_AddActivity()));
+		this.clickLink_AddActivity().click();
 	}
 }

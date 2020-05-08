@@ -3,6 +3,7 @@ package com.kwri.auto.ui.steps;
 import java.util.ArrayList;
 import java.util.List;
 
+import cucumber.api.java.en.And;
 import org.testng.Assert;
 
 import com.google.inject.Inject;
@@ -31,7 +32,7 @@ public class CreateTaskSteps {
 	@Then("validate the task UI")
 	public void validate_the_task_UI(DataTable resData) {
 		List<String> all_elements = new ArrayList<String>();
-		all_elements = ctPage.getLabelText();
+		all_elements = ctPage.clickLabelText();
 		List<String> list = resData.asList(String.class);
 		assertReflectionEquals("Incorrect field names", all_elements, list);
 	}
@@ -46,8 +47,13 @@ public class CreateTaskSteps {
 		ctPage.createTask();
 	}
 
-	@Then("the task is successfully created {string}")
-	public void the_task_is_successfully_created(String taskName) {
-		ctPage.verifyTaskName(taskName);
+	@Then("the task is successfully created")
+	public void the_task_is_successfully_created() {
+		ctPage.verifyTaskName();
+	}
+
+	@And("the task added to the list {string}")
+	public void theTaskAddedToTheList(String taskName) {
+		ctPage.verifyTaskNameInTheList(taskName);
 	}
 }

@@ -37,31 +37,31 @@ public class SeeTimelineSteps extends BasePage {
 	
 	@Then("I Verify that {string} note is present in Timeline")
 	public void i_Verify_that_note_is_present_in_Timeline(String string) {
-		wait.until(ExpectedConditions.visibilityOf(contactsdetailpage.getlbl_SourceChanged()));
-		contactsdetailpage.getlbl_SourceChanged().getText().contains(string);
+		wait.until(ExpectedConditions.visibilityOf(contactsdetailpage.clicklbl_SourceChanged()));
+		contactsdetailpage.clicklbl_SourceChanged().getText().contains(string);
 	}
 	
 	@Then("I Verify that {string} interaction note is present in Timeline")
 	public void i_Verify_that_interaction_note_is_present_in_Timeline(String string) {
-		wait.until(ExpectedConditions.visibilityOf(contactsdetailpage.getlbl_ViewedNewListing()));
-		contactsdetailpage.getlbl_ViewedNewListing().getText().contains(string);
+		wait.until(ExpectedConditions.visibilityOf(contactsdetailpage.clicklbl_ViewedNewListing()));
+		contactsdetailpage.clicklbl_ViewedNewListing().getText().contains(string);
 	}
+
 	@When("I Verify that {string} activity note is present in Timeline")
 	public void i_Verify_that_activity_note_is_present_in_Timeline(String string) {		
-		wait.until(ExpectedConditions.visibilityOf(contactsdetailpage.getlbl_LoggedIntoAgentSite()));
-		contactsdetailpage.getlbl_LoggedIntoAgentSite().getText().contains(string);
-
+		wait.until(ExpectedConditions.visibilityOf(contactsdetailpage.clicklbl_LoggedIntoAgentSite()));
+		contactsdetailpage.clicklbl_LoggedIntoAgentSite().getText().contains(string);
 	}
 	
 	@Then("I Verify that Mark as Lead checkbox is checked")
 	public void i_Verify_that_Mark_as_Lead_checkbox_is_checked() {
-		wait.until(ExpectedConditions.visibilityOf(contactsdetailpage.getlbl_LoggedIntoAgentSite()));
-		assertTrue(contactsdetailpage.getchbox_MarkAsLead().isSelected());
+		wait.until(ExpectedConditions.visibilityOf(contactsdetailpage.clicklbl_LoggedIntoAgentSite()));
+		assertTrue(contactsdetailpage.clickchbox_MarkAsLead().isSelected());
 	}
 	@Then("I Verify that Mark as Lead checkbox is unchecked")
 	public void i_Verify_that_Mark_as_Lead_checkbox_is_unchecked() {
-		wait.until(ExpectedConditions.visibilityOf(contactsdetailpage.getlbl_LoggedIntoAgentSite()));
-		assertFalse(contactsdetailpage.getchbox_MarkAsLead().isSelected());
+		wait.until(ExpectedConditions.visibilityOf(contactsdetailpage.clicklbl_LoggedIntoAgentSite()));
+		assertFalse(contactsdetailpage.clickchbox_MarkAsLead().isSelected());
 	}
 	
 }

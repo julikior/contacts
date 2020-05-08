@@ -1,7 +1,10 @@
 package com.kwri.auto.ui.pages;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.codec.language.bm.Rule;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -15,6 +18,7 @@ import org.testng.Assert;
 import com.google.inject.Inject;
 import com.kwri.auto.ui.di.World;
 import com.kwri.auto.ui.methods.Common;
+import org.testng.remote.strprotocol.IMessage;
 
 public class ContactsPage extends BasePage {
 	@Inject
@@ -72,7 +76,7 @@ public class ContactsPage extends BasePage {
 		world.driver.findElement(By.xpath("//div[text()='" + contactName + "']")).click();
 	}
 
-	public WebElement getbtn_addNewContact() {
+	public WebElement clickbtn_addNewContact() {
 		return btn_addNewContact;
 	}
 
@@ -339,8 +343,11 @@ public class ContactsPage extends BasePage {
 		this.getTxt_contactsSearch().click();
 		this.wait_Until_Contact_Table_Loads();
 
-		if(shouldExist){Assert.assertTrue((world.driver.findElement(By.xpath("//div[contains(text(), '" +
+
+		if(shouldExist) {
+			Assert.assertTrue((world.driver.findElement(By.xpath("//div[contains(text(), '" +
 				contactName.replaceAll("AutoUser", "") + "')]")).isDisplayed()), contactName + " was not found");}
+
 		else{Assert.assertFalse((world.driver.findElements(By.xpath("//div[contains(text(), '" +
 				contactName.replaceAll("AutoUser", "") + "')]")).size() > 0), contactName + " still exists");}
 	}

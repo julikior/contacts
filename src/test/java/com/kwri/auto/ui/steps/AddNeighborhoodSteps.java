@@ -46,17 +46,17 @@ public class AddNeighborhoodSteps extends BasePage {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		wait.until(ExpectedConditions.visibilityOf(contactDetails.getLink_addNeighborhoods()));
-		contactDetails.getLink_addNeighborhoods().click();
+		wait.until(ExpectedConditions.visibilityOf(contactDetails.clickLink_addNeighborhoods()));
+		contactDetails.clickLink_addNeighborhoods().click();
 	}
 
 	@When("I search and select for neighborhood {string}")
 	public void i_search_and_select_for_neighborhood(String neighborhoodName) {
-		wait.until(ExpectedConditions.visibilityOf(contactDetails.getTxt_neighborhoodSearch()));
-		contactsHome.scrollElementIntoView(contactDetails.getTxt_neighborhoodSearch());
-		wait.until(ExpectedConditions.visibilityOf(contactDetails.getTxt_neighborhoodSearch()));
-		contactDetails.getTxt_neighborhoodSearch().click();
-		contactDetails.getTxt_neighborhoodSearch().sendKeys(neighborhoodName);
+		wait.until(ExpectedConditions.visibilityOf(contactDetails.clickTxt_neighborhoodSearch()));
+		contactsHome.scrollElementIntoView(contactDetails.clickTxt_neighborhoodSearch());
+		wait.until(ExpectedConditions.visibilityOf(contactDetails.clickTxt_neighborhoodSearch()));
+		contactDetails.clickTxt_neighborhoodSearch().click();
+		contactDetails.clickTxt_neighborhoodSearch().sendKeys(neighborhoodName);
 		wait.until(
 				ExpectedConditions.visibilityOfElementLocated(By.xpath("(//div[@class='styles__result___3vkU1'])[1]")));
 

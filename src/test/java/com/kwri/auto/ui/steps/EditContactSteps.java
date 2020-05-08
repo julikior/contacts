@@ -35,8 +35,8 @@ public class EditContactSteps extends BasePage {
 
     @When("I click on edit icon")
     public void IClickOnEditIcon() {
-        wait.until(ExpectedConditions.visibilityOf(contactsDetailPage.getspan_EditIcon()));
-        contactsDetailPage.getspan_EditIcon().click();
+        wait.until(ExpectedConditions.visibilityOf(contactsDetailPage.clickspan_EditIcon()));
+        contactsDetailPage.clickspan_EditIcon().click();
     }
 
 

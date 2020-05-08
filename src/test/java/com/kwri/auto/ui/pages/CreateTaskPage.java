@@ -1,18 +1,13 @@
 package com.kwri.auto.ui.pages;
 
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-import org.aspectj.lang.annotation.Before;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
 import com.google.inject.Inject;
@@ -28,62 +23,49 @@ public class CreateTaskPage extends BasePage {
 	}
 
 	Common common = new Common(world.driver);
-	public static Logger LOG = LoggerFactory.getLogger(LoginPage.class);
+	Actions actions = new Actions(world.driver);
+	WebDriverWait wait = new WebDriverWait(world.driver, 10);
 
-	private static final String contactName = "//h3[@class='txt-h3']";
-	@FindBy(xpath = contactName)
+	@FindBy(xpath = "//h3[@class='txt-h3']")
 	private WebElement label_contactName;
 
-	private static final String backContact = "//a[@class='link d-inline-block cursor-pointer']";
-	@FindBy(xpath = backContact)
+	@FindBy(xpath = "//a[contains(text(), 'Back to Contacts')]")
 	private WebElement link_backContact;
 
-	private static final String taskTab = "//* [contains(text(), 'Tasks')]//parent::span";
-	@FindBy(xpath = taskTab)
+	@FindBy(xpath = "//* [contains(text(), 'Tasks')]//parent::span")
 	private WebElement link_taskTab;
 
-	private static final String addTask = "//div[contains(text(), '')]/p/span";
-	@FindBy(xpath = addTask)
+	@FindBy(xpath = "//div[contains(text(), '')]/p/span")
 	private WebElement link_addTask;
 
-	private static final String taskModal = "//div[@class='modal__content']";
-	@FindBy(xpath = taskModal)
+	@FindBy(xpath = "//div[@class='modal__content']")
 	private WebElement window_taskModal;
 
-	private static final String modalTitle = "//div[contains(text(), 'New Task')]";
-	@FindBy(xpath = modalTitle)
+	@FindBy(xpath = "//div[contains(text(), 'New Task')]")
 	private WebElement label_modalTitle;
 
-	private static final String modalUI = "//div[@class='modal__content']//div[contains(@label, '')]/div/label";
-	@FindBy(xpath = modalUI)
+	@FindBy(xpath = "//div[@class='modal__content']//div[contains(@label, '')]/div/label")
 	public List<WebElement> label_modalUI;
 
-	private static final String taskName = "taskName";
-	@FindBy(name = taskName)
+	@FindBy(name = "taskName")
 	private WebElement txtbx_taskName;
 
-	private static final String getCal = "//input[@name='dueDate']";
-	@FindBy(xpath = getCal)
+	@FindBy(xpath = "//input[@name='dueDate']")
 	private WebElement icon_getCal;
 
-	private static final String taskDesc = "taskDesc";
-	@FindBy(name = taskDesc)
+	@FindBy(name = "taskDesc")
 	private WebElement txtbx_taskDesc;
 
-	private static final String hyperLink = "hyperlink";
-	@FindBy(name = hyperLink)
+	@FindBy(name = "hyperlink")
 	private WebElement txtbx_hyperLink;
 
-	private static final String createBtn = "//button[text()='Create Task']";
-	@FindBy(xpath = createBtn)
+	@FindBy(xpath = "//button[text()='Create Task']")
 	private WebElement btn_createTask;
 
-	private static final String taskCreatedMessage = "//*[contains(text(), 'Task successfully created')]";
-	@FindBy(xpath = taskCreatedMessage)
+	@FindBy(xpath = "//*[contains(text(), 'Task successfully created')]")
 	private WebElement msg_taskCreated;
 
-	private static final String verifyTaskName = "//*[contains(@class, 'txt-h4')]//parent::span";
-	@FindBy(xpath = verifyTaskName)
+	@FindBy(xpath = "//*[contains(@class, 'txt-h4')]//parent::span")
 	public WebElement label_taskName;
 
 
@@ -97,7 +79,7 @@ public class CreateTaskPage extends BasePage {
 		common.waitAndClick(10, link_addTask);
 	}
 
-	public List<String> getLabelText() {
+	public List<String> clickLabelText() {
 		List<String> all_elements = new ArrayList<String>();
 		for (int i = 0; i < label_modalUI.size(); i++) {
 			all_elements.add(i, label_modalUI.get(i).getText());
@@ -105,7 +87,7 @@ public class CreateTaskPage extends BasePage {
 		return all_elements;
 	}
 
-	public WebElement getTaskName() {
+	public WebElement fillTaskName() {
 		common.waitForElement(10, txtbx_taskName);
 		return txtbx_taskName;
 	}
@@ -116,12 +98,12 @@ public class CreateTaskPage extends BasePage {
 		txtbx_hyperLink.sendKeys(taskLink);
 	}
 
-	public WebElement getTaskDesc() {
+	public WebElement fillTaskDesc() {
 		common.waitForElement(10, txtbx_taskDesc);
 		return txtbx_taskDesc;
 	}
 
-	public WebElement getHyperlink() {
+	public WebElement fillHyperlink() {
 		common.waitForElement(10, txtbx_hyperLink);
 		return txtbx_hyperLink;
 	}
@@ -130,14 +112,20 @@ public class CreateTaskPage extends BasePage {
 		common.waitAndClick(500, btn_createTask);
 	}
 
-	public boolean verifyTaskName(String TaskName) {
-		WebDriverWait wait = new WebDriverWait(world.driver, 10);
+	public void verifyTaskName() {
 		try {
 			wait.until(ExpectedConditions.visibilityOf(msg_taskCreated));
 			Assert.assertEquals(msg_taskCreated.getText(), "Task successfully created");
-			return true;
+		} catch (Exception ignored) {
+		}
+	}
+
+	public void verifyTaskNameInTheList(String TaskName) {
+		try{
+			wait.until(ExpectedConditions.visibilityOf(label_taskName));
+			Assert.assertEquals(label_taskName.getText(), TaskName);
 		} catch (Exception e) {
-			return false;
+			e.printStackTrace();
 		}
 	}
 }

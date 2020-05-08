@@ -30,8 +30,8 @@ public class DeleteContactSteps extends BasePage {
 
 	@When("I click on archive icon")
 	public void i_click_on_archive_icon() {
-		wait.until(ExpectedConditions.visibilityOf(contactsDetailPage.getIcon_archive()));
-		contactsDetailPage.getIcon_archive().click();
+		wait.until(ExpectedConditions.visibilityOf(contactsDetailPage.clickIcon_archive()));
+		contactsDetailPage.clickIcon_archive().click();
 	}
 
 	@When("I search and open first contact page starting with {string}")

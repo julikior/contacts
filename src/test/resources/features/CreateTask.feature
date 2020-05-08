@@ -17,7 +17,8 @@ Feature: Contact Management - Create Task for a Contact
       | Task Name | All Day | Due Date | Task Description | Add hyperlink |
     When user enters the task details "<task_name>","<task_desc>","<task_url>"
     And clicks on Create Task button
-    Then the task is successfully created "<task_name>"
+    Then the task is successfully created
+    And the task added to the list "<task_name>"
 
     Examples: 
       | task_name     | task_desc     | task_url                |
