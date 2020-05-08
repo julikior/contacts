@@ -9,6 +9,7 @@ import com.kwri.auto.ui.pages.AgentSitePage;
 import com.kwri.auto.ui.pages.BasePage;
 import com.kwri.auto.ui.pages.ContactsPage;
 
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.cucumber.datatable.DataTable;
@@ -441,5 +442,26 @@ public class AddContactSteps extends BasePage {
         wait.until(ExpectedConditions.elementToBeClickable(	addContact.getJobTitleTxt()));
         addContact.getJobTitleTxt().click();
         addContact.getJobTitleTxt().sendKeys("Engineer");
+    }
+
+    @And("I set a date of birth {string}")
+    public void iSetAMonthOfBirth(String month) {
+           // month
+        addContact.setBirthday(month);
+        //world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[1]/div/div[2]/div")).get(1).click();
+    }
+
+    @And("I set a day of birth {string}")
+    public void iSetADayOfBirth(String day) {
+        // month
+        addContact.setDayBirthday(day);
+        //world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[1]/div/div[2]/div")).get(1).click();
+    }
+
+    @And("I set a year of birth {string}")
+    public void iSetAYearOfBirth(String year) {
+        // month
+        addContact.setYearBirthday(year);
+        //world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[1]/div/div[2]/div")).get(1).click();
     }
 }

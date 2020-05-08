@@ -19,6 +19,7 @@ Feature: Contact Management - Create Task for a Contact
     And clicks on Create Task button
     Then the task is successfully created
     And the task added to the list "<task_name>"
+    And I log out of Console
 
     Examples: 
       | task_name     | task_desc     | task_url                |

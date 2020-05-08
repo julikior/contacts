@@ -1,5 +1,6 @@
 package com.kwri.auto.ui.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -114,6 +115,14 @@ public class AddContactModal extends BasePage {
 
 	@FindBy(xpath = "//label[text()='Birthday']//following-sibling::div[1]//*[contains(text(),'Month')]")
 	private WebElement select_MonthOfBirthday;
+
+	@FindBy(xpath = "//label[text()='Birthday']//following-sibling::div[1]//*[contains(text(),'Year')]")
+	private WebElement select_YearOfBirthday;
+
+	@FindBy(xpath = "//label[text()='Birthday']//following-sibling::div[1]//*[contains(text(),'Day')]")
+	private WebElement select_DayOfBirthday;
+
+	private static final String birthDate = "//*[contains(text(), '%s')]";
 
 	public WebElement getBtn_close() {
 		return btn_close;
@@ -235,5 +244,20 @@ public class AddContactModal extends BasePage {
 
 	public WebElement select_MonthOfBirthday() {
 		return select_MonthOfBirthday;
+	}
+
+	public void setBirthday(String birthDateValue) {
+		select_MonthOfBirthday.click();
+		world.driver.findElement(By.xpath(String.format(birthDate, birthDateValue))).click();
+	}
+
+	public void setDayBirthday(String birthDateValue) {
+		select_DayOfBirthday.click();
+		world.driver.findElement(By.xpath(String.format(birthDate, birthDateValue))).click();
+	}
+
+	public void setYearBirthday(String birthDateValue) {
+		select_YearOfBirthday.click();
+		world.driver.findElement(By.xpath(String.format(birthDate, birthDateValue))).click();
 	}
 }
