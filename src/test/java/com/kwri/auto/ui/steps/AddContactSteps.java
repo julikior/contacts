@@ -1,11 +1,9 @@
 package com.kwri.auto.ui.steps;
 
-import com.google.common.base.Supplier;
 import com.google.inject.Inject;
 import com.kwri.auto.ui.di.World;
 import com.kwri.auto.ui.methods.Common;
 import com.kwri.auto.ui.pages.AddContactModal;
-import com.kwri.auto.ui.pages.AgentSitePage;
 import com.kwri.auto.ui.pages.BasePage;
 import com.kwri.auto.ui.pages.ContactsPage;
 
@@ -340,49 +338,10 @@ public class AddContactSteps extends BasePage {
     @Then("I verify that phone is invalid")
     public void i_verify_that_phone_is_invalid () throws Exception{
         Thread.sleep(1000);
-        Assert.assertTrue("The error message is not displayed", world.driver.findElement(By.xpath("//div[contains(text(),'Error')]")).isDisplayed());
+        Assert.assertTrue("The error message is not displayed", addContact.getErrorPhone().isDisplayed());
 
         addContact.getBtn_close().click();
 
-    }
-
-
-    @When("^I select a date of birth$")
-    public void i_select_a_date_of_birth() {
-        // month
-       addContact.select_MonthOfBirthday().click();
-       //world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[1]/div/div[2]/div")).get(1).click();
-
-
-
-        // date
-        world.driver.findElements(By.cssSelector("#dateSelect")).get(0)
-                .findElements(By.cssSelector(".select__indicator")).get(1).click();
-        world.driver.findElements(By.xpath("//*[starts-with(@id, 'react-select-14-input')]")).get(1).click();
-
-
-        // year
-        world.driver.findElements(By.cssSelector("#dateSelect")).get(0)
-                .findElements(By.cssSelector(".select__indicator")).get(2).click();
-        world.driver.findElements(By.xpath("//div[contains(@id, 'react-select-17')]")).get(1).click();
-    }
-
-    @When("^I select a home anniversary$")
-    public void i_select_a_home_anniversary() {
-        // month
-        world.driver.findElements(By.cssSelector("#dateSelect")).get(1)
-                .findElements(By.cssSelector(".select__indicator")).get(0).click();
-        world.driver.findElements(By.xpath("//div[contains(@id, 'react-select-18')]")).get(1).click();
-
-        // date
-        world.driver.findElements(By.cssSelector("#dateSelect")).get(1)
-                .findElements(By.cssSelector(".select__indicator")).get(1).click();
-        world.driver.findElements(By.xpath("//div[contains(@id, 'react-select-19')]")).get(1).click();
-
-        // year
-        world.driver.findElements(By.cssSelector("#dateSelect")).get(1)
-                .findElements(By.cssSelector(".select__indicator")).get(2).click();
-        world.driver.findElements(By.xpath("//div[contains(@id, 'react-select-20')]")).get(0).click();
     }
 
     @When("^I select a relationship$")
@@ -444,24 +403,17 @@ public class AddContactSteps extends BasePage {
         addContact.getJobTitleTxt().sendKeys("Engineer");
     }
 
-    @And("I set a date of birth {string}")
-    public void iSetAMonthOfBirth(String month) {
-           // month
-        addContact.setBirthday(month);
-        //world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[1]/div/div[2]/div")).get(1).click();
+    @And("I select a home anniversary with random date")
+    public void iSelectAHomeAnniversary() {
+        addContact.selectARandomMonthOfAnniv();
+        addContact.selectARandomDayOfAnniv();
+        addContact.selectARandomYearOfAnniv();
     }
 
-    @And("I set a day of birth {string}")
-    public void iSetADayOfBirth(String day) {
-        // month
-        addContact.setDayBirthday(day);
-        //world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[1]/div/div[2]/div")).get(1).click();
-    }
-
-    @And("I set a year of birth {string}")
-    public void iSetAYearOfBirth(String year) {
-        // month
-        addContact.setYearBirthday(year);
-        //world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[1]/div/div[2]/div")).get(1).click();
+    @And("I select a date of birth with random date")
+    public void iSelectADateOfBirthWithRandomDate() {
+        addContact.selectARandomMonth();
+        addContact.selectARandomDay();
+        addContact.selectARandomYear();
     }
 }

@@ -39,7 +39,7 @@ public class LoginPage extends BasePage {
 	@FindBy(xpath = "//a[@href='/command/contacts']")
 	private WebElement contactsApp;
 
-	@FindBy(xpath = "//img[contains(@src,'https://avatar.kwconnect.com/556397.jpeg')]")
+	@FindBy(xpath = "//*[@id=\"__next\"]/div[1]/div[4]/div[4]/div/span")
 	private WebElement btn_profile;
 
 	@FindBy(xpath = "//div[contains(text(),'Log out')]")
@@ -104,8 +104,8 @@ public class LoginPage extends BasePage {
 	}
 
 	public void logout(){
-		wait.until(ExpectedConditions.visibilityOf(getBtn_profile()));
-		getBtn_profile().click();
+		wait.until(ExpectedConditions.visibilityOf(btn_profile));
+		common.waitAndClick(30, btn_profile);
 		getBtn_logout().click();
 		world.driver.close();
 	}

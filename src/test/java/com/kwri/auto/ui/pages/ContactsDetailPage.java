@@ -44,8 +44,7 @@ public class ContactsDetailPage extends BasePage {
 	private WebElement link_AddActivity;
 
 	@FindBy(xpath = "//div[@class='checkbox-wrapper']/child::input")
-	//
-	//input[@id='lead-checkbox']
+
 	private WebElement chbox_MarkAsLead;
 
 	@FindBy(xpath = "//*[@id=\"contactIntro\"]/div[2]/span[2]/span")
@@ -93,10 +92,6 @@ public class ContactsDetailPage extends BasePage {
 	public void clickEditIcon (String Edit) {
 		common.waitAndClick(30, span_EditIcon);
 	}
-
-	/*public void WebElement clickTimelineTab() {
-		common.waitForElement(10, tab_Timeline);
-	}*/
 
 	public void clickAddActivityLink () {
 		this.wait.until(ExpectedConditions.visibilityOf(clickLink_AddActivity()));

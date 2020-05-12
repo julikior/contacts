@@ -37,10 +37,8 @@ Feature: Contact Management - Create a new contact
       #About
       | Legal Name       | AutoUser LegalName                 |
       | Description      | Contact background info...         |
-    And I set a date of birth "January"
-    And I set a day of birth "2"
-    And I set a year of birth "1999"
-    And I select a home anniversary
+    And I select a date of birth with random date
+    And I select a home anniversary with random date
     #And I select a relationship
     #And I select a company name
     And I enter a job title

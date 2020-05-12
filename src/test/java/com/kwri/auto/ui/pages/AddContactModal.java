@@ -11,6 +11,9 @@ import com.google.inject.Inject;
 import com.kwri.auto.ui.di.World;
 import com.kwri.auto.ui.methods.Common;
 
+import java.util.List;
+import java.util.Random;
+
 
 public class AddContactModal extends BasePage {
 	@Inject
@@ -85,7 +88,6 @@ public class AddContactModal extends BasePage {
 	@FindBy(xpath = "//button[text()='Cancel']")
 	private WebElement btn_cancel;
 
-
 	@FindBy(xpath = "//span[text()='Close']")
 	private WebElement btn_close;
 
@@ -105,6 +107,9 @@ public class AddContactModal extends BasePage {
 	private WebElement error_message;
 
 	@FindBy(xpath = "//div[contains(text(),'Error')]")
+	private WebElement error_phoneNum;
+
+	@FindBy(xpath = "//div[contains(text(),'Error')]")
 	private WebElement error_email;
 
 	@FindBy(xpath = "//h4[contains(text(),'Sales Pipeline')]")
@@ -116,13 +121,29 @@ public class AddContactModal extends BasePage {
 	@FindBy(xpath = "//label[text()='Birthday']//following-sibling::div[1]//*[contains(text(),'Month')]")
 	private WebElement select_MonthOfBirthday;
 
+	@FindBy(xpath = "//*[@id=\"dateSelect\"]/div[1]/div/div[2]/div")
+	private WebElement drpdwn_birthdayMonth;
+
 	@FindBy(xpath = "//label[text()='Birthday']//following-sibling::div[1]//*[contains(text(),'Year')]")
 	private WebElement select_YearOfBirthday;
 
 	@FindBy(xpath = "//label[text()='Birthday']//following-sibling::div[1]//*[contains(text(),'Day')]")
 	private WebElement select_DayOfBirthday;
 
+	@FindBy(xpath = "//label[text()='Home Anniversary']//following-sibling::div//*[contains(text(),'Month')]")
+	private WebElement select_MonthOfAnniversary;
+
+	@FindBy(xpath = "//label[text()='Home Anniversary']//following-sibling::div//*[contains(text(),'Year')]")
+	private WebElement select_YearOfAnniversary;
+
+	@FindBy(xpath = "//label[text()='Home Anniversary']//following-sibling::div//*[contains(text(),'Day')]")
+	private WebElement select_DayOfAnniversary;
+
 	private static final String birthDate = "//*[contains(text(), '%s')]";
+
+	private static final String annivDate = "//*[contains(text(), '%s')]";
+
+
 
 	public WebElement getBtn_close() {
 		return btn_close;
@@ -234,6 +255,10 @@ public class AddContactModal extends BasePage {
 		return error_email;
 	}
 
+	public WebElement getErrorPhone(){
+		return error_phoneNum;
+	}
+
 	public WebElement clickSalesPipeline() {
 		return caret_SalesPipeline;
 	}
@@ -246,6 +271,10 @@ public class AddContactModal extends BasePage {
 		return select_MonthOfBirthday;
 	}
 
+	public WebElement getDrpdwnOfMonthBirth(){
+		return drpdwn_birthdayMonth;
+	}
+
 	public void setBirthday(String birthDateValue) {
 		select_MonthOfBirthday.click();
 		world.driver.findElement(By.xpath(String.format(birthDate, birthDateValue))).click();
@@ -253,6 +282,7 @@ public class AddContactModal extends BasePage {
 
 	public void setDayBirthday(String birthDateValue) {
 		select_DayOfBirthday.click();
+		//wait.until(ExpectedConditions.elementToBeClickable(By.xpath(birthDate)));
 		world.driver.findElement(By.xpath(String.format(birthDate, birthDateValue))).click();
 	}
 
@@ -260,4 +290,69 @@ public class AddContactModal extends BasePage {
 		select_YearOfBirthday.click();
 		world.driver.findElement(By.xpath(String.format(birthDate, birthDateValue))).click();
 	}
+
+	public void setAnniversary(String annivDateValue) {
+		select_MonthOfAnniversary.click();
+		world.driver.findElement(By.xpath(String.format(annivDate, annivDateValue))).click();
+	}
+
+	public void setDayAnniversary(String annivDateValue) {
+		select_DayOfAnniversary.click();
+		world.driver.findElement(By.xpath(String.format(annivDate, annivDateValue))).click();
+	}
+
+	public void setMonthAnniversary(String annivDateValue) {
+		select_YearOfAnniversary.click();
+		world.driver.findElement(By.xpath(String.format(annivDate, annivDateValue))).click();
+	}
+
+
+	public void selectARandomMonth() {
+		select_MonthOfBirthday.click();
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[1]/div/div[2]/div"));
+		Random rand = new Random();
+		int randomNumber = rand.nextInt(itemsInDropdown.size());
+		itemsInDropdown.get(randomNumber).click();
+	}
+
+	public void selectARandomDay() {
+		select_DayOfBirthday.click();
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[2]/div/div[2]/div"));
+		Random rand = new Random();
+		int randomNumber = rand.nextInt(itemsInDropdown.size());
+		itemsInDropdown.get(randomNumber).click();
+	}
+
+	public void selectARandomYear() {
+		select_YearOfBirthday.click();
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[3]/div/div[2]/div"));
+		Random rand = new Random();
+		int randomNumber = rand.nextInt(itemsInDropdown.size());
+		itemsInDropdown.get(randomNumber).click();
+	}
+
+	public void selectARandomMonthOfAnniv() {
+		select_MonthOfAnniversary.click();
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[1]/div/div[2]/div"));
+		Random rand = new Random();
+		int randomNumber = rand.nextInt(itemsInDropdown.size());
+		itemsInDropdown.get(randomNumber).click();
+	}
+
+	public void selectARandomDayOfAnniv() {
+		select_DayOfAnniversary.click();
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[2]/div/div[2]/div"));
+		Random rand = new Random();
+		int randomNumber = rand.nextInt(itemsInDropdown.size());
+		itemsInDropdown.get(randomNumber).click();
+	}
+
+	public void selectARandomYearOfAnniv() {
+		select_YearOfAnniversary.click();
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[3]/div/div[2]/div"));
+		Random rand = new Random();
+		int randomNumber = rand.nextInt(itemsInDropdown.size());
+		itemsInDropdown.get(randomNumber).click();
+	}
+
 }
