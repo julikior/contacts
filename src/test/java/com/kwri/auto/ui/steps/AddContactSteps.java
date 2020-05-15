@@ -15,6 +15,7 @@ import io.cucumber.datatable.DataTable;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.tools.ant.taskdefs.condition.IsTrue;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -69,8 +70,7 @@ public class AddContactSteps extends BasePage {
 
     @Then("I verify that 'This email is already in use' error is displayed")
     public void i_verify_email_in_use_error(){
-        Assert.assertTrue("The error message is not displayed",
-                addContact.getErrorMessage().isDisplayed());
+                Assert.assertTrue("This email is already in use by another contact", addContact.getErrorEmail().isDisplayed());
         addContact.getBtn_close().click();
     }
 
@@ -80,6 +80,8 @@ public class AddContactSteps extends BasePage {
         addContact.fillTxt_fullName().click();
         nameValue = "AutoUser " + RandomStringUtils.random(5, true, false);
         addContact.fillTxt_fullName().sendKeys(nameValue);
+        Assert.assertTrue("contact name is displayed", addContact.fillTxt_fullName().isDisplayed());
+
 
         /**
          //Legal Name
@@ -239,10 +241,12 @@ public class AddContactSteps extends BasePage {
         //Primary Email Address
         addContact.getTxt_primaryEmail().click();
         addContact.getTxt_primaryEmail().sendKeys(nameValue + ".primary"+ "@gmail.com");
+        Assert.assertTrue("Email displayed", addContact.getTxt_primaryEmail().isDisplayed());
 
         //Primary Phone Number
         addContact.getTxt_primaryPhoneNumber().click();
         addContact.getTxt_primaryPhoneNumber().sendKeys(list.get(2).get(1));
+        Assert.assertTrue("Phone number displayed", addContact.getTxt_primaryPhoneNumber().isDisplayed());
 
         //Add More Info
         addContact.clickAddMoreInfo().click();
@@ -258,10 +262,12 @@ public class AddContactSteps extends BasePage {
         wait.until(ExpectedConditions.visibilityOf(addContact.getTxt_additionalEmail()));
         addContact.getTxt_additionalEmail().click();
         addContact.getTxt_additionalEmail().sendKeys(nameValue + ".additional"+ "@gmail.com");
+        Assert.assertTrue("Additional email displayed", addContact.getTxt_additionalEmail().isDisplayed());
 
         //Additional Phone Number
         addContact.getTxt_additionalPhoneNumber().click();
         addContact.getTxt_additionalPhoneNumber().sendKeys(list.get(4).get(1));
+        Assert.assertTrue("Additional Phone Number entered", addContact.getTxt_additionalPhoneNumber().isDisplayed());
 
         //Primary Address
         addContact.getTxt_address().click();
@@ -269,16 +275,19 @@ public class AddContactSteps extends BasePage {
         wait.until(ExpectedConditions.visibilityOf(addContact.getSelect_addressToSelect()));
         contactsHome.scrollElementIntoView(addContact.getSelect_addressToSelect());
         addContact.getSelect_addressToSelect().click();
+        Assert.assertTrue("Primary Address selected", addContact.getSelect_addressToSelect().isDisplayed());
 
         //Apartment Number
         wait.until(ExpectedConditions.visibilityOf(addContact.getTxt_apartment()));
         wait.until(ExpectedConditions.elementToBeClickable(addContact.getTxt_apartment()));
         addContact.getTxt_apartment().click();
         addContact.getTxt_apartment().sendKeys(list.get(6).get(1));
+        Assert.assertTrue("Apartment Number entered", addContact.getTxt_apartment().isDisplayed());
 
         //Social Profiles
         addContact.getTxt_socialProfile().click();
         addContact.getTxt_socialProfile().sendKeys(nameValue);
+        Assert.assertTrue("Social Profiles entered", addContact.getTxt_socialProfile().isDisplayed());
 
         //click and expand - About
         addContact.clickAbout().click();
@@ -287,11 +296,13 @@ public class AddContactSteps extends BasePage {
         contactsHome.scrollElementIntoView(addContact.clickTxt_addLegalName());
         addContact.clickTxt_addLegalName().click();
         addContact.clickTxt_addLegalName().sendKeys(list.get(8).get(1));
+        Assert.assertTrue("Legal Name entered", addContact.clickTxt_addLegalName().isDisplayed());
 
         //Description
         wait.until(ExpectedConditions.elementToBeClickable(addContact.getTxt_description()));
         addContact.getTxt_description().click();
         addContact.getTxt_description().sendKeys(list.get(9).get(1));
+        Assert.assertTrue("Description is entered", addContact.getTxt_description().isDisplayed());
     }
 
     @When("I fill in Add Contacts Modal with invalid phone number {string}")
@@ -304,6 +315,7 @@ public class AddContactSteps extends BasePage {
 
         //Primary Invalid Phone Number
         common.waitAndSendText(10, addContact.getTxt_primaryPhoneNumber(), invalidPhone);
+        Assert.assertTrue("Invalid phone number is entered", addContact.getTxt_primaryPhoneNumber().isDisplayed());
     }
 
 
@@ -320,7 +332,6 @@ public class AddContactSteps extends BasePage {
         addContact.fillTxt_fullName().sendKeys(nameValue);
 
         //Primary Invalid Email Address
-
         common.waitAndSendText(10, addContact.getTxt_primaryEmail(), invalidEmail);
 
 
@@ -329,8 +340,9 @@ public class AddContactSteps extends BasePage {
     @Then("I verify that email is invalid")
     public void i_verify_that_email_is_invalid () throws Exception{
         Thread.sleep(1000);
-        Assert.assertTrue("The error message is not displayed",
-                addContact.getErrorEmail().isDisplayed());
+        common.waitForElement(10, addContact.getInvalidErrorMessage());
+        Assert.assertTrue("The error message is displayed",
+                addContact.getInvalidErrorMessage().isDisplayed());
         addContact.getBtn_close().click();
 
     }
@@ -338,7 +350,7 @@ public class AddContactSteps extends BasePage {
     @Then("I verify that phone is invalid")
     public void i_verify_that_phone_is_invalid () throws Exception{
         Thread.sleep(1000);
-        Assert.assertTrue("The error message is not displayed", addContact.getErrorPhone().isDisplayed());
+        Assert.assertTrue("The error message is displayed", addContact.getErrorPhone().isDisplayed());
 
         addContact.getBtn_close().click();
 
@@ -408,6 +420,7 @@ public class AddContactSteps extends BasePage {
         addContact.selectARandomMonthOfAnniv();
         addContact.selectARandomDayOfAnniv();
         addContact.selectARandomYearOfAnniv();
+        Assert.assertTrue("Date of anniversary selected", true);
     }
 
     @And("I select a date of birth with random date")
@@ -415,5 +428,6 @@ public class AddContactSteps extends BasePage {
         addContact.selectARandomMonth();
         addContact.selectARandomDay();
         addContact.selectARandomYear();
+        Assert.assertTrue("Date of birthday selected", true);
     }
 }

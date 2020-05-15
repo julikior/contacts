@@ -103,14 +103,17 @@ public class AddContactModal extends BasePage {
 	@FindBy(xpath = "//h4[text()='About']/../span")
 	private WebElement icon_about;
 
-	@FindBy(xpath = "//div[contains(text(),'This email is already in use by another contact')]")
+	@FindBy(xpath = "//div[contains(text(),'Error')]")
 	private WebElement error_message;
 
 	@FindBy(xpath = "//div[contains(text(),'Error')]")
 	private WebElement error_phoneNum;
 
-	@FindBy(xpath = "//div[contains(text(),'Error')]")
+	@FindBy(xpath = "//div[contains(text(),'This email is already in use by another contact')]")
 	private WebElement error_email;
+
+	@FindBy(xpath = "//div[contains(text(),'Error')]")
+	private WebElement error_invalidEmail;
 
 	@FindBy(xpath = "//h4[contains(text(),'Sales Pipeline')]")
 	private WebElement caret_SalesPipeline;
@@ -154,6 +157,7 @@ public class AddContactModal extends BasePage {
 	}
 
 	public WebElement fillTxt_fullName() {
+		common.waitAndClick(10, txt_fullName);
 		return txt_fullName;
 	}
 
@@ -247,11 +251,12 @@ public class AddContactModal extends BasePage {
 		return icon_about;
 	}
 
-	public WebElement getErrorMessage() {
-		return error_message;
+	public WebElement getInvalidErrorMessage() {
+		return error_invalidEmail;
 	}
 
 	public WebElement getErrorEmail() {
+		common.waitForElement(500, error_email);
 		return error_email;
 	}
 
