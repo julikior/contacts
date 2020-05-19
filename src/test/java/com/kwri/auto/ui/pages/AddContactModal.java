@@ -147,7 +147,6 @@ public class AddContactModal extends BasePage {
 	private static final String annivDate = "//*[contains(text(), '%s')]";
 
 
-
 	public WebElement getBtn_close() {
 		return btn_close;
 	}

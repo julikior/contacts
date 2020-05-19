@@ -6,6 +6,7 @@ import com.kwri.auto.ui.methods.Common;
 import com.kwri.auto.ui.pages.AddContactModal;
 import com.kwri.auto.ui.pages.BasePage;
 import com.kwri.auto.ui.pages.ContactsPage;
+import com.kwri.auto.ui.entities.Contacts;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -41,6 +42,7 @@ public class AddContactSteps extends BasePage {
     JavascriptExecutor jsExecutor;
     static String nameValue;
     static String email;
+    Contacts contacts = new Contacts();
     int phoneValue;
 
     @When("^I click on 'Add new contact' button$")
@@ -234,7 +236,7 @@ public class AddContactSteps extends BasePage {
         List<List<String>> list = dataTable.asLists(String.class);
 
         // Full Name
-        addContact.fillTxt_fullName().click();
+        addContact.getTxt_fullName().click();
         nameValue = list.get(0).get(1) + RandomStringUtils.random(5, true, false);
         addContact.fillTxt_fullName().sendKeys(nameValue);
 
