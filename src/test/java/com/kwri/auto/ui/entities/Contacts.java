@@ -1,31 +1,27 @@
 package com.kwri.auto.ui.entities;
 
+import com.kwri.auto.ui.di.World;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 import java.util.List;
+import java.util.Random;
+
 
 public class Contacts {
-    private String txt_fullName;
-    private String txt_address;
 
-    public String getTxt_fullName() {
-        return txt_fullName;
+    private String nameValue = "AutoUser " + RandomStringUtils.random(5, true, false);
+    private String email = "testtest" + RandomStringUtils.random(5, true, false) + "@test.com";
+
+
+    public String getNameValue() {
+        return nameValue;
     }
 
-    public void setTxt_fullName(String txt_fullName) {
-        this.txt_fullName = txt_fullName;
+    public String getEmail() {
+        return email;
     }
 
-    public void setTxt_address(String txt_address) {
-        this.txt_address = txt_address;
-    }
-
-    public void fillTxt_fullName(String txt_fullName) {
-        this.txt_fullName = txt_fullName;
-    }
-
-
-    public void getTxt_address (String txt_address) {
-        this.txt_address = txt_address;
-    }
 }

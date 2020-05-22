@@ -1,5 +1,6 @@
 package com.kwri.auto.ui.pages;
 
+import com.kwri.auto.ui.entities.Contacts;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -24,6 +25,7 @@ public class AddContactModal extends BasePage {
 	Common common = new Common(world.driver);
 	WebDriverWait wait = new WebDriverWait(world.driver, 10);
 	Actions actions = new Actions(world.driver);
+	Contacts contact = new Contacts();
 
 	@FindBy(xpath = "//div[contains(@class,'modal__dialog styles__add-edit-contact')]")
 	private WebElement modal_AddEditContact;
@@ -155,9 +157,8 @@ public class AddContactModal extends BasePage {
 		return modal_AddEditContact;
 	}
 
-	public WebElement fillTxt_fullName() {
+	public void fillTxt_fullName() {
 		common.waitAndClick(10, txt_fullName);
-		return txt_fullName;
 	}
 
 	public WebElement clickTxt_addLegalName() {
@@ -358,5 +359,10 @@ public class AddContactModal extends BasePage {
 		int randomNumber = rand.nextInt(itemsInDropdown.size());
 		itemsInDropdown.get(randomNumber).click();
 	}
+
+	//public Contacts createContact(Contacts contact){
+		//contact.setFullName(fillTxt_fullName());
+
+	//}
 
 }

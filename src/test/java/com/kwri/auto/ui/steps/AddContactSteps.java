@@ -42,7 +42,7 @@ public class AddContactSteps extends BasePage {
     JavascriptExecutor jsExecutor;
     static String nameValue;
     static String email;
-    Contacts contacts = new Contacts();
+    Contacts contact = new Contacts();
     int phoneValue;
 
     @When("^I click on 'Add new contact' button$")
@@ -55,19 +55,16 @@ public class AddContactSteps extends BasePage {
     public void i_create_user_with_email() {
         //Full Name
         addContact.fillTxt_fullName().click();
-        nameValue = "testtest " + RandomStringUtils.random(5, true, false);
-        email = "testtest" + RandomStringUtils.random(5, true, false) + "@test.com";
-        addContact.fillTxt_fullName().sendKeys(nameValue);
-        addContact.getTxt_primaryEmail().sendKeys(email);
+        addContact.fillTxt_fullName().sendKeys(contact.getNameValue());
+        addContact.getTxt_primaryEmail().sendKeys(contact.getEmail());
     }
 
     @When("^I create user wih the same email$")
     public void i_create_user_with_the_same_email() {
         //Full Name
         addContact.fillTxt_fullName().click();
-        nameValue = "AutoUser " + RandomStringUtils.random(5, true, false);
-        addContact.fillTxt_fullName().sendKeys(nameValue);
-        addContact.getTxt_primaryEmail().sendKeys(email);
+        addContact.fillTxt_fullName().sendKeys(contact.getNameValue());
+        addContact.getTxt_primaryEmail().sendKeys(contact.getEmail());
     }
 
     @Then("I verify that 'This email is already in use' error is displayed")
@@ -80,8 +77,7 @@ public class AddContactSteps extends BasePage {
     public void enter_details_on_form_as() {
         //Full Name
         addContact.fillTxt_fullName().click();
-        nameValue = "AutoUser " + RandomStringUtils.random(5, true, false);
-        addContact.fillTxt_fullName().sendKeys(nameValue);
+        addContact.fillTxt_fullName().sendKeys(contact.getNameValue());
         Assert.assertTrue("contact name is displayed", addContact.fillTxt_fullName().isDisplayed());
 
 
@@ -127,7 +123,7 @@ public class AddContactSteps extends BasePage {
 
     @Then("^I verify that the a new contact is added \"([^\"]*)\" to the contact list$")
     public void i_verify_that_the_a_new_contact_is_added_to_the_contact_list(String shouldExist) {
-        contactsHome.verifyContactExists(nameValue, Boolean.parseBoolean(shouldExist));
+        contactsHome.verifyContactExists(contact.getNameValue(), Boolean.parseBoolean(shouldExist));
     }
 
 
@@ -236,13 +232,12 @@ public class AddContactSteps extends BasePage {
         List<List<String>> list = dataTable.asLists(String.class);
 
         // Full Name
-        addContact.getTxt_fullName().click();
-        nameValue = list.get(0).get(1) + RandomStringUtils.random(5, true, false);
-        addContact.fillTxt_fullName().sendKeys(nameValue);
+        addContact.fillTxt_fullName().click();
+        addContact.fillTxt_fullName().sendKeys(contact.getNameValue());
 
         //Primary Email Address
         addContact.getTxt_primaryEmail().click();
-        addContact.getTxt_primaryEmail().sendKeys(nameValue + ".primary"+ "@gmail.com");
+        addContact.getTxt_primaryEmail().sendKeys(contact.getNameValue() + ".primary"+ "@gmail.com");
         Assert.assertTrue("Email displayed", addContact.getTxt_primaryEmail().isDisplayed());
 
         //Primary Phone Number
@@ -263,7 +258,7 @@ public class AddContactSteps extends BasePage {
         //Additional Email Address
         wait.until(ExpectedConditions.visibilityOf(addContact.getTxt_additionalEmail()));
         addContact.getTxt_additionalEmail().click();
-        addContact.getTxt_additionalEmail().sendKeys(nameValue + ".additional"+ "@gmail.com");
+        addContact.getTxt_additionalEmail().sendKeys(contact.getNameValue() + ".additional"+ "@gmail.com");
         Assert.assertTrue("Additional email displayed", addContact.getTxt_additionalEmail().isDisplayed());
 
         //Additional Phone Number
@@ -288,7 +283,7 @@ public class AddContactSteps extends BasePage {
 
         //Social Profiles
         addContact.getTxt_socialProfile().click();
-        addContact.getTxt_socialProfile().sendKeys(nameValue);
+        addContact.getTxt_socialProfile().sendKeys(contact.getNameValue());
         Assert.assertTrue("Social Profiles entered", addContact.getTxt_socialProfile().isDisplayed());
 
         //click and expand - About
@@ -312,8 +307,7 @@ public class AddContactSteps extends BasePage {
 
         // Full Name
         addContact.fillTxt_fullName().click();
-        nameValue = "AutoUser " + RandomStringUtils.random(5, true, false);
-        addContact.fillTxt_fullName().sendKeys(nameValue);
+        addContact.fillTxt_fullName().sendKeys(contact.getNameValue());
 
         //Primary Invalid Phone Number
         common.waitAndSendText(10, addContact.getTxt_primaryPhoneNumber(), invalidPhone);
@@ -330,8 +324,7 @@ public class AddContactSteps extends BasePage {
     public void i_fill_in_Add_Contacts_Modal_with_invalid_primary_email(String invalidEmail) throws Exception {
         // Full Name
         addContact.fillTxt_fullName().click();
-        nameValue = "AutoUser " + RandomStringUtils.random(5, true, false);
-        addContact.fillTxt_fullName().sendKeys(nameValue);
+        addContact.fillTxt_fullName().sendKeys(contact.getNameValue());
 
         //Primary Invalid Email Address
         common.waitAndSendText(10, addContact.getTxt_primaryEmail(), invalidEmail);
