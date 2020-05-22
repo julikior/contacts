@@ -65,8 +65,8 @@ public class AgentSiteLoginSteps extends BasePage  {
 	public void i_fill_in_Add_Contacts_Modal_with_following_data() {
 		
 		// Full Name
-		wait.until(ExpectedConditions.visibilityOf(addContact.fillTxt_fullName()));
-		addContact.fillTxt_fullName().sendKeys("First Last");
+	//	wait.until(ExpectedConditions.visibilityOf(addContact.fillTxt_fullName()));
+	//	addContact.fillTxt_fullName().sendKeys("First Last");
 
 		// Primary Email Address
 		addContact.getTxt_primaryEmail().sendKeys(CreateRandomEmail());

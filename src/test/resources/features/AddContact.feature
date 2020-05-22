@@ -25,18 +25,8 @@ Feature: Contact Management - Create a new contact
   Scenario: Creating a new contact with mandatory fields
     When I click on 'Add new contact' button
     And I fill in Add Contacts Modal with following data
-      | Full Name        | AutoUser                           |
-      | Email Address    | `name`+randomstr@gmail.com         |
-      | Phone Number     |                         2818181011 |
-      #Additional Contact Information
-      | Additional Email | additional+`name`+random@gmail.com |
-      | Additional Phone |                         2818181012 |
-      | Primary Address  | 311 California Street              |
-      | Apartment Num    |                                201 |
-      | Social Profile   | AutoUser                         |
-      #About
-      | Legal Name       | AutoUser LegalName                 |
-      | Description      | Contact background info...         |
+      | Full Name   | Email Address                      | Phone Number |  Additional Email                  | Additional Phone | Primary Address       | Apartment Num | Legal Name        | Description      |
+      | AutoUser    | `name`+randomstr@gmail.com         |  2818181011  | additional+`name`+random@gmail.com | 2818181012       | 311 California Street | 201           |AutoUser LegalName | Contact background info... |
     And I select a date of birth with random date
     And I select a home anniversary with random date
     #And I select a relationship
@@ -46,6 +36,9 @@ Feature: Contact Management - Create a new contact
     And I select a stage as captured
     And I click on 'Save Contact' button
     Then I verify that the a new contact is added "true" to the contact list
+    And I search for contact 'AutoUser'
+    And I select a contact 'AutoUser' to see contact details
+    Then I verify contact data
     And I log out of Console
 
   @AddContactWithInvalidEmail @COM-11764
