@@ -2,6 +2,7 @@ package com.kwri.auto.ui.pages;
 
 import java.util.List;
 
+import com.kwri.auto.ui.entities.Contacts;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -53,6 +54,8 @@ public class ContactsDetailPage extends BasePage {
 	@FindBy(xpath = "//*[contains(text(), 'Timeline')]//parent::div")
 	private WebElement tab_Timeline;
 
+	private static final String contactAttribute = "//*[text()='%s']/ancestor::div[2]/div[2]";
+
 	public WebElement clickIcon_archive() { return icon_archive; }
 
 	public WebElement clickLink_AddActivity() { return link_AddActivity; }
@@ -96,5 +99,25 @@ public class ContactsDetailPage extends BasePage {
 	public void clickAddActivityLink () {
 		this.wait.until(ExpectedConditions.visibilityOf(clickLink_AddActivity()));
 		this.clickLink_AddActivity().click();
+	}
+
+	public Contacts getContactData (){
+		Contacts contact = new Contacts();
+
+		common.isPresent(30, world.driver.findElement(By.xpath(String.format(contactAttribute, "Email"))));
+
+		contact.setEmail(getContactAttribute("Email"));
+		//contact.setPhoneNumber(getContactAttribute("Phone"));// main phone
+		contact.setAddEmail(getContactAttribute("Phone"));
+		contact.setPrimaryAddress(getContactAttribute("Home Address"));
+		contact.setApartmentNum(getContactAttribute("Home Address"));
+		contact.setLegalName(getContactAttribute("Legal Name"));
+
+
+		return contact;
+	}
+
+	private String getContactAttribute(String contactAttributeName) {
+		return world.driver.findElement(By.xpath(String.format(contactAttribute, contactAttributeName))).getText();
 	}
 }

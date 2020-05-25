@@ -5,6 +5,7 @@ import com.kwri.auto.ui.di.World;
 import com.kwri.auto.ui.methods.Common;
 import com.kwri.auto.ui.pages.AddContactModal;
 import com.kwri.auto.ui.pages.BasePage;
+import com.kwri.auto.ui.pages.ContactsDetailPage;
 import com.kwri.auto.ui.pages.ContactsPage;
 import com.kwri.auto.ui.entities.Contacts;
 
@@ -22,7 +23,12 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 public class AddContactSteps extends BasePage {
+
+    private String shouldExist;
 
     @Inject
     public AddContactSteps(World world) {
@@ -39,9 +45,7 @@ public class AddContactSteps extends BasePage {
     WebDriverWait wait = new WebDriverWait(world.driver, 10);
     Actions actions;
     JavascriptExecutor jsExecutor;
-    static String nameValue;
     static String email;
-    Contacts expectedContact = new Contacts();
     int phoneValue;
 
     @When("^I click on 'Add new contact' button$")
@@ -54,8 +58,7 @@ public class AddContactSteps extends BasePage {
     public void i_create_user_with_email() {
         //Full Name
         //addContact.fillTxt_fullName().click();
-        //addContact.fillTxt_fullName().sendKeys(contact.getNameValue());
-        addContact.getTxt_primaryEmail().sendKeys(expectedContact.getEmail());
+        addContact.getTxt_primaryEmail().sendKeys(addContact.expectedContact.getEmail());
     }
 
     @When("^I create user wih the same email$")
@@ -63,7 +66,7 @@ public class AddContactSteps extends BasePage {
         //Full Name
        // addContact.fillTxt_fullName().click();
      //   addContact.fillTxt_fullName().sendKeys(contact.getNameValue());
-        addContact.getTxt_primaryEmail().sendKeys(expectedContact.getEmail());
+        addContact.getTxt_primaryEmail().sendKeys(addContact.expectedContact.getEmail());
     }
 
     @Then("I verify that 'This email is already in use' error is displayed")
@@ -75,9 +78,10 @@ public class AddContactSteps extends BasePage {
     @When("^Enter details on add new contact form$")
     public void enter_details_on_form_as() {
         //Full Name
-       // addContact.fillTxt_fullName().click();
-        //addContact.fillTxt_fullName().sendKeys(contact.getNameValue());
-       // Assert.assertTrue("contact name is displayed", addContact.fillTxt_fullName().isDisplayed());
+        addContact.fillTxt_fullName().click();
+        addContact.fillTxt_fullName().sendKeys(addContact.expectedContact.getNameValue());
+        Assert.assertTrue("contact name is displayed", addContact.fillTxt_fullName().isDisplayed());
+
 
 
         /**
@@ -113,6 +117,7 @@ public class AddContactSteps extends BasePage {
     @When("^I click on 'Save Contact' button$")
     public void i_click_on_Save_Contact_button() {
         addContact.clickBtn_createContact().click();
+        System.out.println("yaha hai .. " + addContact.expectedContact.getNameValue());
     }
 
     @When("^I click on 'Cancel' button$")
@@ -121,9 +126,18 @@ public class AddContactSteps extends BasePage {
     }
 
     @Then("^I verify that the a new contact is added \"([^\"]*)\" to the contact list$")
-    public void i_verify_that_the_a_new_contact_is_added_to_the_contact_list(String shouldExist) {
-        contactsHome.verifyContactExists(expectedContact.getNameValue(), Boolean.parseBoolean(shouldExist));
+    public void i_verify_that_the_a_new_contact_is_added_to_the_contact_list(String nameValue) throws Throwable {
+        System.out.println("yaha hai .. " + addContact.expectedContact.getNameValue());
+
+        contactsHome.verifyContactExists(addContact.expectedContact.getNameValue(), Boolean.parseBoolean(shouldExist));
+        //assertTrue(contactsHome.isContactExist(addContact.expectedContact.getNameValue()));
+
     }
+
+    /*@Then("^I verify that the a new contact is added \"([^\"]*)\" to the contact list$")
+    public void iVerifyThatTheANewContactIsAddedToTheContactList(String nameValue, boolean shouldExist){
+        assertEquals(contactsHome.verifyContactExists(addContact.expectedContact.getNameValue()), Boolean.parseBoolean(String.valueOf(shouldExist)));
+    }*/
 
 
     @When("^I select a preferred method$")
@@ -226,24 +240,36 @@ public class AddContactSteps extends BasePage {
         addContact.getInput_customField().sendKeys("Custom Agent PTest");
     }
 
-    @When("I fill in Add Contacts Modal with following data")
-    public void i_fill_in_Add_Contacts_Modal_with_following_data(DataTable dataTable) {
+    @When("I create {string} with following data")
+    public void iCreateWithFollowingData(String contactData, DataTable dataTable) {
         List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
-        expectedContact.setEmail(data.get(0).get("Email Address"));
-        expectedContact.setPhoneNumber(data.get(0).get("Phone Number"));
+
+        addContact.expectedContact.setContactData(contactData);
+        //addContact.expectedContact.setNameValue(addContact.expectedContact.getNameValue());
+        addContact.expectedContact.setEmail(data.get(0).get("Email Address"));
+        addContact.expectedContact.setPhoneNumber(data.get(0).get("Phone Number"));
+        addContact.expectedContact.setAddEmail(data.get(0).get("Additional Email"));
+        addContact.expectedContact.setAddPhone(data.get(0).get("Additional Phone"));
+        addContact.expectedContact.setPrimaryAddress(data.get(0).get("Primary Address"));
+        addContact.expectedContact.setApartmentNum(data.get(0).get("Apartment Num"));
+        addContact.expectedContact.setLegalName(data.get(0).get("Legal Name"));
+        addContact.expectedContact.setDescription(data.get(0).get("Description"));
+
+
 
         // Full Name
-        addContact.fillTxt_fullName();
-        addContact.fillTxt_fullName();
+        addContact.fillTxt_fullName().click();
+        addContact.fillTxt_fullName().sendKeys(addContact.expectedContact.getNameValue());
+
 
         //Primary Email Address
         addContact.getTxt_primaryEmail().click();
-        addContact.getTxt_primaryEmail().sendKeys(expectedContact.getNameValue() + ".primary"+ "@gmail.com");
+        addContact.getTxt_primaryEmail().sendKeys(addContact.expectedContact.getNameValue() + ".primary"+ "@gmail.com");
         Assert.assertTrue("Email displayed", addContact.getTxt_primaryEmail().isDisplayed());
 
         //Primary Phone Number
         addContact.getTxt_primaryPhoneNumber().click();
-        addContact.getTxt_primaryPhoneNumber().sendKeys(expectedContact.getPhoneNumber());
+        addContact.getTxt_primaryPhoneNumber().sendKeys(addContact.expectedContact.getPhoneNumber());
         Assert.assertTrue("Phone number displayed", addContact.getTxt_primaryPhoneNumber().isDisplayed());
 
         //Add More Info
@@ -259,17 +285,15 @@ public class AddContactSteps extends BasePage {
         //Additional Email Address
         wait.until(ExpectedConditions.visibilityOf(addContact.getTxt_additionalEmail()));
         addContact.getTxt_additionalEmail().click();
-        addContact.getTxt_additionalEmail().sendKeys(expectedContact.getNameValue() + ".additional"+ "@gmail.com");
+        addContact.getTxt_additionalEmail().sendKeys(addContact.expectedContact.getNameValue() + ".additional"+ "@gmail.com");
         Assert.assertTrue("Additional email displayed", addContact.getTxt_additionalEmail().isDisplayed());
 
         //Additional Phone Number
         addContact.getTxt_additionalPhoneNumber().click();
-      //  addContact.getTxt_additionalPhoneNumber().sendKeys(list.get(4).get(1));
         Assert.assertTrue("Additional Phone Number entered", addContact.getTxt_additionalPhoneNumber().isDisplayed());
 
         //Primary Address
         addContact.getTxt_address().click();
-      //  addContact.getTxt_address().sendKeys(list.get(5).get(1));
         wait.until(ExpectedConditions.visibilityOf(addContact.getSelect_addressToSelect()));
         contactsHome.scrollElementIntoView(addContact.getSelect_addressToSelect());
         addContact.getSelect_addressToSelect().click();
@@ -279,12 +303,11 @@ public class AddContactSteps extends BasePage {
         wait.until(ExpectedConditions.visibilityOf(addContact.getTxt_apartment()));
         wait.until(ExpectedConditions.elementToBeClickable(addContact.getTxt_apartment()));
         addContact.getTxt_apartment().click();
-       // addContact.getTxt_apartment().sendKeys(list.get(6).get(1));
         Assert.assertTrue("Apartment Number entered", addContact.getTxt_apartment().isDisplayed());
 
         //Social Profiles
         addContact.getTxt_socialProfile().click();
-        addContact.getTxt_socialProfile().sendKeys(expectedContact.getNameValue());
+        addContact.getTxt_socialProfile().sendKeys(addContact.expectedContact.getNameValue());
         Assert.assertTrue("Social Profiles entered", addContact.getTxt_socialProfile().isDisplayed());
 
         //click and expand - About
@@ -293,13 +316,11 @@ public class AddContactSteps extends BasePage {
         //Legal Name
         contactsHome.scrollElementIntoView(addContact.clickTxt_addLegalName());
         addContact.clickTxt_addLegalName().click();
-      //  addContact.clickTxt_addLegalName().sendKeys(list.get(8).get(1));
         Assert.assertTrue("Legal Name entered", addContact.clickTxt_addLegalName().isDisplayed());
 
         //Description
         wait.until(ExpectedConditions.elementToBeClickable(addContact.getTxt_description()));
         addContact.getTxt_description().click();
-      //  addContact.getTxt_description().sendKeys(list.get(9).get(1));
         Assert.assertTrue("Description is entered", addContact.getTxt_description().isDisplayed());
     }
 
@@ -426,4 +447,12 @@ public class AddContactSteps extends BasePage {
         addContact.selectARandomYear();
         Assert.assertTrue("Date of birthday selected", true);
     }
+
+
+    /*@Then("I verify contact data")
+    public void iVerifyContactData() {
+        Contacts actualContacts = ContactsDetailPage.getContactData();
+
+
+    }*/
 }
