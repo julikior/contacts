@@ -16,17 +16,17 @@ import io.cucumber.datatable.DataTable;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
 public class AddContactSteps extends BasePage {
 
@@ -253,7 +253,8 @@ public class AddContactSteps extends BasePage {
         addContact.fillTxt_fullName().sendKeys(nameValue);
 
         //Primary Email Address
-        addContact.getTxt_primaryEmail().sendKeys(nameValue + ".primary"+ "@gmail.com");
+        expectedContact.setEmail(nameValue + ".primary"+ "@gmail.com");
+        addContact.getTxt_primaryEmail().sendKeys(expectedContact.getEmail());
         Assert.assertTrue("Email displayed", addContact.getTxt_primaryEmail().isDisplayed());
 
         //Primary Phone Number
@@ -439,7 +440,6 @@ public class AddContactSteps extends BasePage {
     @Then("I verify contact data")
     public void iVerifyContactData() {
         Contacts actualContacts = ContactsDetailPage.getContactData();
-
-
+        assertReflectionEquals(expectedContact, actualContacts);
     }
 }

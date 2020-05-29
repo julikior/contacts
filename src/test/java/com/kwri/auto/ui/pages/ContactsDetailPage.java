@@ -5,6 +5,7 @@ import java.util.List;
 import com.kwri.auto.ui.entities.Contacts;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
@@ -54,7 +55,7 @@ public class ContactsDetailPage extends BasePage {
 	@FindBy(xpath = "//*[contains(text(), 'Timeline')]//parent::div")
 	private WebElement tab_Timeline;
 
-	@FindBy(xpath = "//*[@id=\"contact-name\"]/h2")
+	@FindBy(xpath = "//*[@id='contact-name']/h2")
 	private WebElement contactName;
 
 	private static final String contactAttribute = "//*[text()='%s']/ancestor::div[2]/div[2]";
@@ -110,21 +111,24 @@ public class ContactsDetailPage extends BasePage {
 
 	public Contacts getContactData (){
 		Contacts contact = new Contacts();
-
-		//common.isPresent(30, world.driver.findElement(By.xpath(String.valueOf(contactName))));
-
+		this.wait.until(ExpectedConditions.visibilityOf(contactName));
+		//Actions actions = new Actions(world.driver);
+		//actions.moveToElement(getWebElement("Email"));
 		contact.setEmail(getContactAttribute("Email"));
 		//contact.setAddEmail(getContactAttribute("Phone"));
 		contact.setPrimaryAddress(getContactAttribute("Home Address"));
 		contact.setLegalName(getContactAttribute("Legal Name"));
 		contact.setDescription(getContactAttribute("Description"));
 
-
 		return contact;
 	}
 
 	private String getContactAttribute(String contactAttributeName) {
 		return world.driver.findElement(By.xpath(String.format(contactAttribute, contactAttributeName))).getText();
+	}
+
+	private WebElement getWebElement(String contactAttributeName){
+		return world.driver.findElement(By.xpath(String.format(contactAttribute, contactAttributeName)));
 	}
 
 }
