@@ -250,7 +250,8 @@ public class AddContactSteps extends BasePage {
         expectedContact.setDescription(data.get(0).get("Description"));
 
         // Full Name
-        addContact.fillTxt_fullName().sendKeys(nameValue);
+        expectedContact.setNameValue(nameValue);
+        addContact.fillTxt_fullName().sendKeys(expectedContact.getNameValue());
 
         //Primary Email Address
         expectedContact.setEmail(nameValue + ".primary"+ "@gmail.com");
