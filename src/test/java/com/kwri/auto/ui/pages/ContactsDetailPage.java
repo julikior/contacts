@@ -54,6 +54,9 @@ public class ContactsDetailPage extends BasePage {
 	@FindBy(xpath = "//*[contains(text(), 'Timeline')]//parent::div")
 	private WebElement tab_Timeline;
 
+	@FindBy(xpath = "//*[@id=\"contact-name\"]/h2")
+	private WebElement contactName;
+
 	private static final String contactAttribute = "//*[text()='%s']/ancestor::div[2]/div[2]";
 
 	public WebElement clickIcon_archive() { return icon_archive; }
@@ -88,6 +91,10 @@ public class ContactsDetailPage extends BasePage {
 		return txt_neighborhoodSearch;
 	}
 
+	public WebElement getContactName() {
+		return contactName;
+	}
+
 	public enum TimelineItems {
 		TODAY, WEEK, MONTH, ALL
 	};
@@ -104,14 +111,13 @@ public class ContactsDetailPage extends BasePage {
 	public Contacts getContactData (){
 		Contacts contact = new Contacts();
 
-		common.isPresent(30, world.driver.findElement(By.xpath(String.format(contactAttribute, "Email"))));
+		//common.isPresent(30, world.driver.findElement(By.xpath(String.valueOf(contactName))));
 
 		contact.setEmail(getContactAttribute("Email"));
-		//contact.setPhoneNumber(getContactAttribute("Phone"));// main phone
-		contact.setAddEmail(getContactAttribute("Phone"));
+		//contact.setAddEmail(getContactAttribute("Phone"));
 		contact.setPrimaryAddress(getContactAttribute("Home Address"));
-		contact.setApartmentNum(getContactAttribute("Home Address"));
 		contact.setLegalName(getContactAttribute("Legal Name"));
+		contact.setDescription(getContactAttribute("Description"));
 
 
 		return contact;
@@ -120,4 +126,5 @@ public class ContactsDetailPage extends BasePage {
 	private String getContactAttribute(String contactAttributeName) {
 		return world.driver.findElement(By.xpath(String.format(contactAttribute, contactAttributeName))).getText();
 	}
+
 }

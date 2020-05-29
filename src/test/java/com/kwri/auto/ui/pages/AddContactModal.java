@@ -159,7 +159,7 @@ public class AddContactModal extends BasePage {
 	}
 
 	public WebElement fillTxt_fullName() {
-		common.waitAndClick(10, txt_fullName);
+		common.waitAndClick(100, txt_fullName);
 		return txt_fullName;
 	}
 
@@ -362,9 +362,5 @@ public class AddContactModal extends BasePage {
 		itemsInDropdown.get(randomNumber).click();
 	}
 
-	public WebElement setUniqueContactName (Contacts contact){
-		txt_fullName.sendKeys(contact.getNameValue());
-		return fillTxt_fullName();
-	}
 
 }

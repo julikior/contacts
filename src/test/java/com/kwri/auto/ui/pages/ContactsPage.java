@@ -341,10 +341,10 @@ public class ContactsPage extends BasePage {
 		world.driver.findElement(By.xpath("//div[2]/div/a/div[1]")).click();
 	}
 
-	public Contacts verifyContactExists(String contactName, boolean shouldExist) {
+	public void verifyContactExists(String contactName, boolean shouldExist) {
 		this.wait_Until_Contact_Table_Loads();
 		// search for contact
-		this.getTxt_contactsSearch().sendKeys(expectedContact.getNameValue());
+		this.getTxt_contactsSearch().sendKeys(contactName);
 		this.getTxt_contactsSearch().click();
 		this.wait_Until_Contact_Table_Loads();
 
@@ -352,21 +352,6 @@ public class ContactsPage extends BasePage {
 				contactName.replaceAll("AutoUser", "") + "')]")).isDisplayed()), contactName + " was not found");}
 		else{Assert.assertFalse((world.driver.findElements(By.xpath("//div[contains(text(), '" +
 				contactName.replaceAll("AutoUser", "") + "')]")).size() > 0), contactName + " still exists");}
-
-
-		try {
-			Assert.assertTrue(true, "Contact exist");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return expectedContact;
-
 	}
 
-
-	/*public boolean isContactExist(String nameValue) {
-		world.driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		getTxt_contactsSearch().sendKeys(expectedContact.getNameValue());
-		return common.isPresent(100, world.driver.findElement(By.xpath("//*[@id=\"__next\"]/div[3]/div/div/div/div/div[3]/div/div[4]/div/div[1]/div[2]/div[1]/div/div[2]/div/a/div")));
-	}*/
 }

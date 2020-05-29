@@ -1,6 +1,8 @@
 package com.kwri.auto.ui.steps;
 
+import com.kwri.auto.ui.pages.AddContactModal;
 import com.kwri.auto.ui.pages.ContactsDetailPage;
+import cucumber.api.java.en.And;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -28,6 +30,9 @@ public class AddActivitySteps extends BasePage {
 
 	@Inject
 	ContactsDetailPage contactsDetailPage;
+
+	@Inject
+	AddContactModal addContact;
 
 	Common common = new Common(world.driver);
 	WebDriverWait wait = new WebDriverWait(world.driver, 15);
@@ -83,7 +88,8 @@ public class AddActivitySteps extends BasePage {
 		wait.until(
 				ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@role='gridcell']/div")));
 		WebElement cont = world.driver.findElement(By.xpath("//a [contains(@href, '/command/contacts/')]"));
-		contactsHome.javaScriptClick(cont);}}
+		contactsHome.javaScriptClick(cont);}
+}
 
 	/*	wait.until(ExpectedConditions
 				.visibilityOfElementLocated(By.xpath("//h2[contains(text(),'Interactions')]")));
