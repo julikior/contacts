@@ -1,14 +1,11 @@
 package com.kwri.auto.ui.pages;
 
-import java.util.List;
-
 import com.kwri.auto.ui.entities.Contacts;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.google.inject.Inject;
@@ -16,13 +13,19 @@ import com.kwri.auto.ui.di.World;
 import com.kwri.auto.ui.methods.Common;
 
 public class ContactsDetailPage extends BasePage {
+
 	@Inject
 	public ContactsDetailPage(World world) {
 		super(world);
 	}
 
+	@Inject
+	ContactsPage contactsHome;
+
 	Common common = new Common(world.driver);
 	WebDriverWait wait = new WebDriverWait(world.driver, 10);
+	JavascriptExecutor jsExecutor;
+
 
 	@FindBy(xpath = "//span[contains(@class, 'icon icon--archive')]")
 	private WebElement icon_archive;
@@ -46,19 +49,31 @@ public class ContactsDetailPage extends BasePage {
 	private WebElement link_AddActivity;
 
 	@FindBy(xpath = "//div[@class='checkbox-wrapper']/child::input")
-
 	private WebElement chbox_MarkAsLead;
 
-	@FindBy(xpath = "//*[@id=\"contactIntro\"]/div[2]/span[2]/span")
+	@FindBy(xpath = "//*[@id='contactIntro']/div[2]/span[2]/span")
 	private WebElement span_EditIcon;
 
 	@FindBy(xpath = "//*[contains(text(), 'Timeline')]//parent::div")
 	private WebElement tab_Timeline;
 
-	@FindBy(xpath = "//*[@id='contact-name']/h2")
-	private WebElement contactName;
+	@FindBy(xpath = "//*[@id='socialLogo']")
+	private WebElement img_SocialLogo;
+
 
 	private static final String contactAttribute = "//*[text()='%s']/ancestor::div[2]/div[2]";
+
+	private static final String contactName = "//*[@id='contact-name']/h2";
+
+	private static final String phoneNumber = "//*[@id='__next']//child::div[1]/div/a/h3";
+
+	private static String primaryEmail = "//*[@id='__next']//child::div[2]/div/a/h3";
+
+	private static String additionalEmail = "//*[@id='nonPrimaryEmail']";
+
+	private static String apartmentNum = "//*[@id='secondHomeAddress']//ancestor::div[1]/p[2]";
+
+	private static String primaryAddress = "//*[@id='mainHomeAddress']//ancestor::div[1]/p[1]";
 
 	public WebElement clickIcon_archive() { return icon_archive; }
 
@@ -92,13 +107,13 @@ public class ContactsDetailPage extends BasePage {
 		return txt_neighborhoodSearch;
 	}
 
-	public WebElement getContactName() {
-		return contactName;
+	public WebElement getImg_SocialLogo(){
+		return img_SocialLogo;
 	}
 
 	public enum TimelineItems {
 		TODAY, WEEK, MONTH, ALL
-	};
+	}
 
 	public void clickEditIcon (String Edit) {
 		common.waitAndClick(30, span_EditIcon);
@@ -111,24 +126,55 @@ public class ContactsDetailPage extends BasePage {
 
 	public Contacts getContactData (){
 		Contacts contact = new Contacts();
-		this.wait.until(ExpectedConditions.visibilityOf(contactName));
-		//Actions actions = new Actions(world.driver);
-		//actions.moveToElement(getWebElement("Email"));
-		contact.setEmail(getContactAttribute("Email"));
-		//contact.setAddEmail(getContactAttribute("Phone"));
-		contact.setPrimaryAddress(getContactAttribute("Home Address"));
+		this.wait.until(ExpectedConditions.visibilityOf(clickspan_EditIcon()));
+		contact.setNameValue(getContactName());
+		contact.setPhoneNumber(getPhoneNumber());
+		contact.setEmail(getPrimaryEmail());
+		contact.setAddEmail(getAdditionalEmail());
+		contact.setAddPhone(getAdditionalPhone());
+		contact.setPrimaryAddress(getPrimaryAddress());
+		contact.setApartmentNum(getApartmentNum());
 		contact.setLegalName(getContactAttribute("Legal Name"));
 		contact.setDescription(getContactAttribute("Description"));
+		contact.setJobTitle(getContactAttribute("Title"));
 
 		return contact;
 	}
 
-	private String getContactAttribute(String contactAttributeName) {
-		return world.driver.findElement(By.xpath(String.format(contactAttribute, contactAttributeName))).getText();
+	private String getContactAttribute(String contactAttributeData) {
+		return world.driver.findElement(By.xpath(String.format(contactAttribute, contactAttributeData))).getText();
 	}
 
-	private WebElement getWebElement(String contactAttributeName){
-		return world.driver.findElement(By.xpath(String.format(contactAttribute, contactAttributeName)));
+	private String getContactName(){
+		return world.driver.findElement(By.xpath(ContactsDetailPage.contactName)).getText();
+	}
+
+	private String getPrimaryEmail(){
+		return world.driver.findElement(By.xpath(ContactsDetailPage.primaryEmail)).getText();
+	}
+
+	private String getAdditionalEmail(){
+		return world.driver.findElement(By.xpath(ContactsDetailPage.additionalEmail)).getText();
+	}
+
+	private String getPhoneNumber() {
+		String phoneFmt = world.driver.findElement(By.xpath(ContactsDetailPage.phoneNumber)).getText();
+		return phoneFmt.replaceFirst("1", "").replaceAll("[+\\s\\-]", "");
+	}
+
+	private String getApartmentNum() {
+		contactsHome.scrollElementIntoView(getImg_SocialLogo());
+		return world.driver.findElement(By.xpath(ContactsDetailPage.apartmentNum)).getText();
+	}
+
+	private String getPrimaryAddress() {
+		String primaryAddress =  world.driver.findElement(By.xpath(ContactsDetailPage.primaryAddress)).getText();
+		return primaryAddress.replaceFirst("\\nPrimary", "");
+	}
+
+	private String getAdditionalPhone() {
+		String phoneFmt = getContactAttribute("Phone");
+		return phoneFmt.replaceFirst("1", "").replaceAll("[+\\s\\-]", "");
 	}
 
 }

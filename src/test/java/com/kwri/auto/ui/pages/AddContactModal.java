@@ -43,7 +43,7 @@ public class AddContactModal extends BasePage {
 	@FindBy(xpath = "(//div[contains(text(),'311 California Street')])[1]")
 	private WebElement select_addressToSelect;
 
-	@FindBy(xpath = "//input[@name='addresses[0].addressLine2']")
+	@FindBy(xpath = "//*[contains(label, 'Apt/Unit/Suite')]//child::input")
 	private WebElement txt_apartment;
 
 	@FindBy(xpath = "//input[@name='addresses[0].isMailing']")
@@ -127,7 +127,7 @@ public class AddContactModal extends BasePage {
 	@FindBy(xpath = "//label[text()='Birthday']//following-sibling::div[1]//*[contains(text(),'Month')]")
 	private WebElement select_MonthOfBirthday;
 
-	@FindBy(xpath = "//*[@id=\"dateSelect\"]/div[1]/div/div[2]/div")
+	@FindBy(xpath = "//*[@id='dateSelect']/div[1]/div/div[2]/div")
 	private WebElement drpdwn_birthdayMonth;
 
 	@FindBy(xpath = "//label[text()='Birthday']//following-sibling::div[1]//*[contains(text(),'Year')]")
@@ -177,6 +177,7 @@ public class AddContactModal extends BasePage {
 	}
 
 	public WebElement getTxt_apartment() {
+		common.waitAndClick(50, txt_apartment);
 		return txt_apartment;
 	}
 
@@ -316,51 +317,55 @@ public class AddContactModal extends BasePage {
 
 	public void selectARandomMonth() {
 		select_MonthOfBirthday.click();
-		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[1]/div/div[2]/div"));
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[1]/div/div[2]/div"));
 		Random rand = new Random();
 		int randomNumber = rand.nextInt(itemsInDropdown.size());
 		itemsInDropdown.get(randomNumber).click();
+		System.out.println(randomNumber);
 	}
 
 	public void selectARandomDay() {
 		select_DayOfBirthday.click();
-		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[2]/div/div[2]/div"));
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[2]/div/div[2]/div"));
 		Random rand = new Random();
 		int randomNumber = rand.nextInt(itemsInDropdown.size());
 		itemsInDropdown.get(randomNumber).click();
+		System.out.println(randomNumber);
 	}
 
 	public void selectARandomYear() {
 		select_YearOfBirthday.click();
-		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[3]/div/div[2]/div"));
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[3]/div/div[2]/div"));
 		Random rand = new Random();
 		int randomNumber = rand.nextInt(itemsInDropdown.size());
 		itemsInDropdown.get(randomNumber).click();
+		System.out.println(randomNumber);
 	}
 
 	public void selectARandomMonthOfAnniv() {
 		select_MonthOfAnniversary.click();
-		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[1]/div/div[2]/div"));
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[1]/div/div[2]/div"));
 		Random rand = new Random();
 		int randomNumber = rand.nextInt(itemsInDropdown.size());
 		itemsInDropdown.get(randomNumber).click();
+		System.out.println(rand);
 	}
 
 	public void selectARandomDayOfAnniv() {
 		select_DayOfAnniversary.click();
-		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[2]/div/div[2]/div"));
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[2]/div/div[2]/div"));
 		Random rand = new Random();
 		int randomNumber = rand.nextInt(itemsInDropdown.size());
 		itemsInDropdown.get(randomNumber).click();
+		System.out.println(itemsInDropdown.get(randomNumber));
 	}
 
 	public void selectARandomYearOfAnniv() {
 		select_YearOfAnniversary.click();
-		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id=\"dateSelect\"]/div[3]/div/div[2]/div"));
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[3]/div/div[2]/div"));
 		Random rand = new Random();
 		int randomNumber = rand.nextInt(itemsInDropdown.size());
 		itemsInDropdown.get(randomNumber).click();
+		System.out.println(itemsInDropdown.get(randomNumber));
 	}
-
-
 }

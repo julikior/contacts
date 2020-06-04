@@ -81,7 +81,6 @@ public class AddContactSteps extends BasePage {
     @When("^Enter details on add new contact form$")
     public void enter_details_on_form_as() {
         //Full Name
-        addContact.fillTxt_fullName().click();
         addContact.fillTxt_fullName().sendKeys(nameValue);
         Assert.assertTrue("contact name is displayed", addContact.fillTxt_fullName().isDisplayed());
 
@@ -121,7 +120,6 @@ public class AddContactSteps extends BasePage {
     public void i_click_on_Save_Contact_button() {
         addContact.clickBtn_createContact().click();
         System.out.println("yaha hai .. " + nameValue);
-        //wait.until(ExpectedConditions.invisibilityOf(addContact.clickBtn_createContact()));
     }
 
     @When("^I click on 'Cancel' button$")
@@ -196,7 +194,7 @@ public class AddContactSteps extends BasePage {
     @When("^I add a social profile$")
     public void i_add_a_social_profile() {
         addContact.getTxt_socialProfile().click();
-        addContact.getTxt_socialProfile().sendKeys("PTestUser");
+        addContact.getTxt_socialProfile().sendKeys(nameValue);
     }
 
     @When("^I select a transaction time frame$")
@@ -239,7 +237,7 @@ public class AddContactSteps extends BasePage {
     public void iCreateWithFollowingData(DataTable dataTable) {
         List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
 
-        //expectedContact.setNameValue(data.get(0).get("Full Name"));
+        expectedContact.setNameValue(data.get(0).get(nameValue));
         expectedContact.setEmail(data.get(0).get("Email Address"));
         expectedContact.setPhoneNumber(data.get(0).get("Phone Number"));
         expectedContact.setAddEmail(data.get(0).get("Additional Email"));
@@ -248,6 +246,7 @@ public class AddContactSteps extends BasePage {
         expectedContact.setApartmentNum(data.get(0).get("Apartment Num"));
         expectedContact.setLegalName(data.get(0).get("Legal Name"));
         expectedContact.setDescription(data.get(0).get("Description"));
+        expectedContact.setJobTitle(data.get(0).get("Job Title"));
 
         // Full Name
         expectedContact.setNameValue(nameValue);
@@ -259,7 +258,6 @@ public class AddContactSteps extends BasePage {
         Assert.assertTrue("Email displayed", addContact.getTxt_primaryEmail().isDisplayed());
 
         //Primary Phone Number
-        addContact.getTxt_primaryPhoneNumber().click();
         addContact.getTxt_primaryPhoneNumber().sendKeys(expectedContact.getPhoneNumber());
         Assert.assertTrue("Phone number displayed", addContact.getTxt_primaryPhoneNumber().isDisplayed());
 
@@ -276,15 +274,16 @@ public class AddContactSteps extends BasePage {
         //Additional Email Address
         wait.until(ExpectedConditions.visibilityOf(addContact.getTxt_additionalEmail()));
         addContact.getTxt_additionalEmail().click();
+        expectedContact.setAddEmail(nameValue + ".additional"+ "@gmail.com");
         addContact.getTxt_additionalEmail().sendKeys(nameValue + ".additional"+ "@gmail.com");
         Assert.assertTrue("Additional email displayed", addContact.getTxt_additionalEmail().isDisplayed());
 
         //Additional Phone Number
-        addContact.getTxt_additionalPhoneNumber().click();
-        Assert.assertTrue("Additional Phone Number entered", addContact.getTxt_additionalPhoneNumber().isDisplayed());
+        addContact.getTxt_additionalEmail().click();
+        addContact.getTxt_additionalPhoneNumber().sendKeys(expectedContact.getAddPhone());
 
         //Primary Address
-        //addContact.getTxt_address().click();
+        addContact.getTxt_address().click();
         addContact.getTxt_address().sendKeys(expectedContact.getPrimaryAddress());
         wait.until(ExpectedConditions.visibilityOf(addContact.getSelect_addressToSelect()));
         contactsHome.scrollElementIntoView(addContact.getSelect_addressToSelect());
@@ -292,13 +291,12 @@ public class AddContactSteps extends BasePage {
         Assert.assertTrue("Primary Address selected", addContact.getSelect_addressToSelect().isDisplayed());
 
         //Apartment Number
-        wait.until(ExpectedConditions.visibilityOf(addContact.getTxt_apartment()));
         wait.until(ExpectedConditions.elementToBeClickable(addContact.getTxt_apartment()));
-        addContact.getTxt_apartment().click();
+        addContact.getTxt_apartment().sendKeys(expectedContact.getApartmentNum());
         Assert.assertTrue("Apartment Number entered", addContact.getTxt_apartment().isDisplayed());
 
         //Social Profiles
-        addContact.getTxt_socialProfile().click();
+        wait.until(ExpectedConditions.elementToBeClickable(addContact.getTxt_socialProfile()));
         addContact.getTxt_socialProfile().sendKeys(nameValue);
         Assert.assertTrue("Social Profiles entered", addContact.getTxt_socialProfile().isDisplayed());
 
@@ -313,14 +311,11 @@ public class AddContactSteps extends BasePage {
         wait.until(ExpectedConditions.elementToBeClickable(addContact.getTxt_description()));
         addContact.getTxt_description().sendKeys(expectedContact.getDescription());
         Assert.assertTrue("Description is entered", addContact.getTxt_description().isDisplayed());
+
     }
 
     @When("I fill in Add Contacts Modal with invalid phone number {string}")
     public void i_fill_in_Add_Contacts_Modal_with_invalid_phone_number(String invalidPhone) throws Exception {
-
-        // Full Name
-      //  addContact.fillTxt_fullName().click();
-      //  addContact.fillTxt_fullName().sendKeys(contact.getNameValue());
 
         //Primary Invalid Phone Number
         common.waitAndSendText(10, addContact.getTxt_primaryPhoneNumber(), invalidPhone);
@@ -334,14 +329,9 @@ public class AddContactSteps extends BasePage {
 
     @When("I fill in Add Contacts Modal with invalid email {string}")
     public void i_fill_in_Add_Contacts_Modal_with_invalid_primary_email(String invalidEmail) throws Exception {
-        // Full Name
-       // addContact.fillTxt_fullName().click();
-      //  addContact.fillTxt_fullName().sendKeys(contact.getNameValue());
 
         //Primary Invalid Email Address
         common.waitAndSendText(10, addContact.getTxt_primaryEmail(), invalidEmail);
-
-
     }
 
     @Then("I verify that email is invalid")
@@ -351,7 +341,6 @@ public class AddContactSteps extends BasePage {
         Assert.assertTrue("The error message is displayed",
                 addContact.getInvalidErrorMessage().isDisplayed());
         addContact.getBtn_close().click();
-
     }
 
     @Then("I verify that phone is invalid")
@@ -359,7 +348,6 @@ public class AddContactSteps extends BasePage {
         Thread.sleep(1000);
         Assert.assertTrue("The error message is displayed", addContact.getErrorPhone().isDisplayed());
         addContact.getBtn_close().click();
-
     }
 
     @When("^I select a relationship$")
@@ -417,8 +405,7 @@ public class AddContactSteps extends BasePage {
     @When("^I enter a job title$")
     public void i_enter_a_job_title() {
         wait.until(ExpectedConditions.elementToBeClickable(	addContact.getJobTitleTxt()));
-        addContact.getJobTitleTxt().click();
-        addContact.getJobTitleTxt().sendKeys("Engineer");
+        addContact.getJobTitleTxt().sendKeys(expectedContact.getJobTitle());
     }
 
     @And("I select a home anniversary with random date")
@@ -437,10 +424,26 @@ public class AddContactSteps extends BasePage {
         Assert.assertTrue("Date of birthday selected", true);
     }
 
-
     @Then("I verify contact data")
     public void iVerifyContactData() {
         Contacts actualContacts = ContactsDetailPage.getContactData();
         assertReflectionEquals(expectedContact, actualContacts);
     }
+
+    /*private String getDateOfBirth(){
+        String dateOfBirth = expectedContact.setSelect_MonthOfBirthday(getSelect_MonthOfBirthday());
+        String strDateOfBirth = "MM/dd/YY";
+        DateFormat dateFormat = new SimpleDateFormat(strDateOfBirth);
+        return dateFormat.format(dateOfBirth);
+    }
+
+    private String getSelect_MonthOfBirthday() {
+        List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[1]/div/div[2]/div"));
+        Random rand = new Random();
+        int randomNumber = rand.nextInt(itemsInDropdown.size());
+        itemsInDropdown.get(randomNumber).click();
+        return getSelect_MonthOfBirthday();
+    }*/
+
+
 }

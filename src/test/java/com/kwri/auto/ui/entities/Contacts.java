@@ -1,9 +1,5 @@
 package com.kwri.auto.ui.entities;
 
-import org.apache.commons.lang3.RandomStringUtils;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
-
 
 public class Contacts {
 
@@ -22,6 +18,8 @@ public class Contacts {
     private String select_MonthOfAnniversary;
     private String select_DayOfAnniversary;
     private String select_YearOfAnniversary;
+    private String socialProfile;
+    private String jobTitle;
 
     public void setNameValue(String nameValue) {
         this.nameValue = nameValue;
@@ -59,8 +57,9 @@ public class Contacts {
         this.legalName = legalName;
     }
 
-    public void setSelect_MonthOfBirthday(String select_MonthOfBirthday) {
+    public String setSelect_MonthOfBirthday(String select_MonthOfBirthday) {
         this.select_MonthOfBirthday = select_MonthOfBirthday;
+        return select_MonthOfBirthday;
     }
 
     public void setSelect_DayOfBirthday(String select_DayOfBirthday) {
@@ -81,6 +80,14 @@ public class Contacts {
 
     public void setSelect_YearOfAnniversary(String select_YearOfAnniversary) {
         this.select_YearOfAnniversary = select_YearOfAnniversary;
+    }
+
+    public void setSocialProfile(String socialProfile) {
+        this.socialProfile = socialProfile;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
     }
 
     public String getDescription() {
@@ -141,5 +148,13 @@ public class Contacts {
 
     public String getSelect_YearOfAnniversary() {
         return select_YearOfAnniversary;
+    }
+
+    public String getSocialProfile() {
+        return socialProfile;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
     }
 }
