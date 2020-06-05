@@ -1,6 +1,7 @@
 package com.kwri.auto.ui.pages;
 
 import com.kwri.auto.ui.entities.Contacts;
+import com.kwri.auto.ui.entities.Month;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -347,6 +348,7 @@ public class AddContactModal extends BasePage {
 		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[1]/div/div[2]/div"));
 		Random rand = new Random();
 		int randomNumber = rand.nextInt(itemsInDropdown.size());
+		String month = String.valueOf(Month.values()[randomNumber]);
 		itemsInDropdown.get(randomNumber).click();
 		System.out.println(rand);
 	}
