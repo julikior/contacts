@@ -248,6 +248,7 @@ public class AddContactSteps extends BasePage {
         expectedContact.setDescription(data.get(0).get("Description"));
         expectedContact.setJobTitle(data.get(0).get("Job Title"));
 
+
         // Full Name
         expectedContact.setNameValue(nameValue);
         addContact.fillTxt_fullName().sendKeys(expectedContact.getNameValue());
@@ -297,8 +298,8 @@ public class AddContactSteps extends BasePage {
 
         //Social Profiles
         wait.until(ExpectedConditions.elementToBeClickable(addContact.getTxt_socialProfile()));
-        addContact.getTxt_socialProfile().sendKeys(nameValue);
-        Assert.assertTrue("Social Profiles entered", addContact.getTxt_socialProfile().isDisplayed());
+        expectedContact.setSocialProfile("https://www.facebook.com/" + expectedContact.getNameValue());
+        addContact.getTxt_socialProfile().sendKeys(expectedContact.getSocialProfile());
 
         //click and expand - About
         addContact.clickAbout().click();
