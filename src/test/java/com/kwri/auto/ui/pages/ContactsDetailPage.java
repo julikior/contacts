@@ -66,6 +66,8 @@ public class ContactsDetailPage extends BasePage {
 	private static final String contactName = "//*[@id='contact-name']/h2";
 
 	private static final String phoneNumber = "//*[@id='__next']//child::div[1]/div/a/h3";
+	@FindBy(xpath = phoneNumber)
+	private WebElement txtPhoneNumber;
 
 	private static String primaryEmail = "//*[@id='__next']//child::div[2]/div/a/h3";
 
@@ -139,7 +141,7 @@ public class ContactsDetailPage extends BasePage {
 		contact.setLegalName(getContactAttribute("Legal Name"));
 		contact.setDescription(getContactAttribute("Description"));
 		contact.setJobTitle(getContactAttribute("Title"));
-		contact.setSocialProfile(getSocialProfile() + expectedContact.getNameValue());
+		contact.setSocialProfile(getSocialProfile());
 		contact.setBirthday(getContactAttribute("Birthday"));
 		contact.setHomeAnniversary(getContactAttribute("Home Anniversary"));
 
@@ -183,7 +185,7 @@ public class ContactsDetailPage extends BasePage {
 	}
 
 	private String getSocialProfile() {
-		return world.driver.findElement(By.xpath(ContactsDetailPage.socialProfile)).getText();
+		return world.driver.findElement(By.xpath(ContactsDetailPage.socialProfile)).getAttribute("href");
 	}
 
 }

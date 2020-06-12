@@ -300,7 +300,8 @@ public class AddContactSteps extends BasePage {
         //Social Profiles
         wait.until(ExpectedConditions.elementToBeClickable(addContact.getTxt_socialProfile()));
         expectedContact.setSocialProfile("https://www.facebook.com/" + expectedContact.getNameValue());
-        addContact.getTxt_socialProfile().sendKeys(expectedContact.getSocialProfile());
+        addContact.getTxt_socialProfile().clear();
+        addContact.getTxt_socialProfile().sendKeys(expectedContact.getNameValue());
 
         //click and expand - About
         addContact.clickAbout().click();
@@ -412,16 +413,15 @@ public class AddContactSteps extends BasePage {
 
     @And("I select a home anniversary with random date")
     public void iSelectAHomeAnniversary() {
-        WebElement randomMonth = addContact.selectARandomMonthOfAnniv();
-        randomMonth.click();
-        WebElement randomDay = addContact.selectARandomDayOfAnniv();
-        randomDay.click();
-        WebElement randomYear = addContact.selectARandomYearOfAnniv();
-        randomYear.click();
+        int randomMonth = addContact.selectARandomMonthOfAnniv();
 
+        int randomDay = addContact.selectARandomDayOfAnniv();
 
-        //expectedContact.setSelect_MonthOfBirthday();
-        //String selectedValue = randomMonth.getText() + ... + ...;
+        int randomYear = addContact.selectARandomYearOfAnniv();
+
+        String anniversary = String.valueOf(Month.values()[randomMonth]) + " " + String.valueOf(randomDay+1) + ", " + (Calendar.getInstance().get(Calendar.YEAR) - randomYear);
+
+        expectedContact.setHomeAnniversary(anniversary);
     }
 
     @And("I select a date of birth with random date")

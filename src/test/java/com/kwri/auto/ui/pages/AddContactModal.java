@@ -347,33 +347,36 @@ public class AddContactModal extends BasePage {
 		return randomYearOfBirth;
 	}
 
-	public WebElement selectARandomMonthOfAnniv() {
+	public int selectARandomMonthOfAnniv() {
 		select_MonthOfAnniversary.click();
 		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[1]/div/div[2]/div/div"));
 		Random rand = new Random();
 		int randomNumber = rand.nextInt(itemsInDropdown.size());
 		WebElement randomMonth = itemsInDropdown.get(randomNumber);
+		randomMonth.click();
 		System.out.println(rand);
-		return randomMonth;
+		return randomNumber;
 	}
 
-	public WebElement selectARandomDayOfAnniv() {
+	public int selectARandomDayOfAnniv() {
 		select_DayOfAnniversary.click();
 		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[2]/div/div[2]/div/div"));
 		Random rand = new Random();
 		int randomNumber = rand.nextInt(itemsInDropdown.size());
 		WebElement randomDay = itemsInDropdown.get(randomNumber);
+		randomDay.click();
 		System.out.println(itemsInDropdown.get(randomNumber));
-		return randomDay;
+		return randomNumber;
 	}
 
-	public WebElement selectARandomYearOfAnniv() {
+	public int selectARandomYearOfAnniv() {
 		select_YearOfAnniversary.click();
 		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[3]/div/div[2]/div/div"));
 		Random rand = new Random();
 		int randomNumber = rand.nextInt(itemsInDropdown.size());
 		WebElement randomYear = itemsInDropdown.get(randomNumber);
+		randomYear.click();
 		System.out.println(itemsInDropdown.get(randomNumber));
-		return randomYear;
+		return randomNumber;
 	}
 }
