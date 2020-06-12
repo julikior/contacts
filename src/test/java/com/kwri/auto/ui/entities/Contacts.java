@@ -20,6 +20,8 @@ public class Contacts {
     private String select_YearOfAnniversary;
     private String socialProfile;
     private String jobTitle;
+    private String Birthday;
+    private String HomeAnniversary;
 
     public void setNameValue(String nameValue) {
         this.nameValue = nameValue;
@@ -57,9 +59,8 @@ public class Contacts {
         this.legalName = legalName;
     }
 
-    public String setSelect_MonthOfBirthday(String select_MonthOfBirthday) {
+    public void setSelect_MonthOfBirthday(String select_MonthOfBirthday) {
         this.select_MonthOfBirthday = select_MonthOfBirthday;
-        return select_MonthOfBirthday;
     }
 
     public void setSelect_DayOfBirthday(String select_DayOfBirthday) {
@@ -80,6 +81,14 @@ public class Contacts {
 
     public void setSelect_YearOfAnniversary(String select_YearOfAnniversary) {
         this.select_YearOfAnniversary = select_YearOfAnniversary;
+    }
+
+    public void setBirthday(String birthday) {
+        Birthday = birthday;
+    }
+
+    public void setHomeAnniversary(String homeAnniversary) {
+        HomeAnniversary = homeAnniversary;
     }
 
     public void setSocialProfile(String socialProfile) {
@@ -156,5 +165,13 @@ public class Contacts {
 
     public String getJobTitle() {
         return jobTitle;
+    }
+
+    public String getBirthday() {
+        return Birthday;
+    }
+
+    public String getHomeAnniversary() {
+        return HomeAnniversary;
     }
 }

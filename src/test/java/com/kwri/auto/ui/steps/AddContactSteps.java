@@ -1,6 +1,7 @@
 package com.kwri.auto.ui.steps;
 
 import com.google.inject.Inject;
+import com.kwri.auto.ui.Enum.Month;
 import com.kwri.auto.ui.di.World;
 import com.kwri.auto.ui.entities.Contacts;
 import com.kwri.auto.ui.methods.Common;
@@ -14,8 +15,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.cucumber.datatable.DataTable;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -247,6 +246,8 @@ public class AddContactSteps extends BasePage {
         expectedContact.setLegalName(data.get(0).get("Legal Name"));
         expectedContact.setDescription(data.get(0).get("Description"));
         expectedContact.setJobTitle(data.get(0).get("Job Title"));
+        //expectedContact.setBirthday();
+        //expectedContact.setHomeAnniversary();
 
 
         // Full Name
@@ -411,18 +412,31 @@ public class AddContactSteps extends BasePage {
 
     @And("I select a home anniversary with random date")
     public void iSelectAHomeAnniversary() {
-        addContact.selectARandomMonthOfAnniv();
-        addContact.selectARandomDayOfAnniv();
-        addContact.selectARandomYearOfAnniv();
-        Assert.assertTrue("Date of anniversary selected", true);
+        WebElement randomMonth = addContact.selectARandomMonthOfAnniv();
+        randomMonth.click();
+        WebElement randomDay = addContact.selectARandomDayOfAnniv();
+        randomDay.click();
+        WebElement randomYear = addContact.selectARandomYearOfAnniv();
+        randomYear.click();
+
+
+        //expectedContact.setSelect_MonthOfBirthday();
+        //String selectedValue = randomMonth.getText() + ... + ...;
     }
 
     @And("I select a date of birth with random date")
     public void iSelectADateOfBirthWithRandomDate() {
-        addContact.selectARandomMonth();
-        addContact.selectARandomDay();
-        addContact.selectARandomYear();
-        Assert.assertTrue("Date of birthday selected", true);
+        addContact.select_MonthOfBirthday().click();
+        wait.until(ExpectedConditions.visibilityOf(addContact.selectMonthBirth()));
+        WebElement randomMonthOfBirth = addContact.selectARandomMonth();
+        randomMonthOfBirth.click();
+        WebElement randomDayOfBirth = addContact.selectARandomDay();
+        randomDayOfBirth.click();
+        WebElement randomYearOfBirth = addContact.selectARandomYear();
+        randomYearOfBirth.click();
+
+        //String selectedBirth = String.join(" ", randomMonthOfBirth.getText(), randomDayOfBirth.getText() + ",", randomYearOfBirth.getText());
+        //System.out.println(selectedBirth);
     }
 
     @Then("I verify contact data")
@@ -430,21 +444,4 @@ public class AddContactSteps extends BasePage {
         Contacts actualContacts = ContactsDetailPage.getContactData();
         assertReflectionEquals(expectedContact, actualContacts);
     }
-
-    /*private String getDateOfBirth(){
-        String dateOfBirth = expectedContact.setSelect_MonthOfBirthday(getSelect_MonthOfBirthday());
-        String strDateOfBirth = "MM/dd/YY";
-        DateFormat dateFormat = new SimpleDateFormat(strDateOfBirth);
-        return dateFormat.format(dateOfBirth);
-    }
-
-    private String getSelect_MonthOfBirthday() {
-        List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[1]/div/div[2]/div"));
-        Random rand = new Random();
-        int randomNumber = rand.nextInt(itemsInDropdown.size());
-        itemsInDropdown.get(randomNumber).click();
-        return getSelect_MonthOfBirthday();
-    }*/
-
-
 }

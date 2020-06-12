@@ -25,6 +25,7 @@ public class ContactsDetailPage extends BasePage {
 	Common common = new Common(world.driver);
 	WebDriverWait wait = new WebDriverWait(world.driver, 10);
 	JavascriptExecutor jsExecutor;
+	private static Contacts expectedContact = new Contacts();
 
 
 	@FindBy(xpath = "//span[contains(@class, 'icon icon--archive')]")
@@ -60,7 +61,6 @@ public class ContactsDetailPage extends BasePage {
 	@FindBy(xpath = "//*[@id='socialLogo']")
 	private WebElement img_SocialLogo;
 
-
 	private static final String contactAttribute = "//*[text()='%s']/ancestor::div[2]/div[2]";
 
 	private static final String contactName = "//*[@id='contact-name']/h2";
@@ -74,6 +74,8 @@ public class ContactsDetailPage extends BasePage {
 	private static String apartmentNum = "//*[@id='secondHomeAddress']//ancestor::div[1]/p[2]";
 
 	private static String primaryAddress = "//*[@id='mainHomeAddress']//ancestor::div[1]/p[1]";
+
+	private static String socialProfile = "//*[contains(@href, 'https://www.facebook.com')]";
 
 	public WebElement clickIcon_archive() { return icon_archive; }
 
@@ -137,6 +139,9 @@ public class ContactsDetailPage extends BasePage {
 		contact.setLegalName(getContactAttribute("Legal Name"));
 		contact.setDescription(getContactAttribute("Description"));
 		contact.setJobTitle(getContactAttribute("Title"));
+		contact.setSocialProfile(getSocialProfile() + expectedContact.getNameValue());
+		contact.setBirthday(getContactAttribute("Birthday"));
+		contact.setHomeAnniversary(getContactAttribute("Home Anniversary"));
 
 		return contact;
 	}
@@ -175,6 +180,10 @@ public class ContactsDetailPage extends BasePage {
 	private String getAdditionalPhone() {
 		String phoneFmt = getContactAttribute("Phone");
 		return phoneFmt.replaceFirst("1", "").replaceAll("[+\\s\\-]", "");
+	}
+
+	private String getSocialProfile() {
+		return world.driver.findElement(By.xpath(ContactsDetailPage.socialProfile)).getText();
 	}
 
 }

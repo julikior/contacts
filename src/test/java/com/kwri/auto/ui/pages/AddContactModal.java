@@ -1,7 +1,6 @@
 package com.kwri.auto.ui.pages;
 
-import com.kwri.auto.ui.entities.Contacts;
-import com.kwri.auto.ui.entities.Month;
+import com.kwri.auto.ui.Enum.Month;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -18,6 +17,7 @@ import java.util.Random;
 
 
 public class AddContactModal extends BasePage {
+
 	@Inject
 	public AddContactModal(World world) {
 		super(world);
@@ -26,7 +26,6 @@ public class AddContactModal extends BasePage {
 	Common common = new Common(world.driver);
 	WebDriverWait wait = new WebDriverWait(world.driver, 10);
 	Actions actions = new Actions(world.driver);
-	public Contacts expectedContact = new Contacts();
 
 
 	@FindBy(xpath = "//div[contains(@class,'modal__dialog styles__add-edit-contact')]")
@@ -126,10 +125,7 @@ public class AddContactModal extends BasePage {
 	private WebElement drpdwn_leadSource;
 
 	@FindBy(xpath = "//label[text()='Birthday']//following-sibling::div[1]//*[contains(text(),'Month')]")
-	private WebElement select_MonthOfBirthday;
-
-	@FindBy(xpath = "//*[@id='dateSelect']/div[1]/div/div[2]/div")
-	private WebElement drpdwn_birthdayMonth;
+	private WebElement monthOfBirthday;
 
 	@FindBy(xpath = "//label[text()='Birthday']//following-sibling::div[1]//*[contains(text(),'Year')]")
 	private WebElement select_YearOfBirthday;
@@ -146,9 +142,14 @@ public class AddContactModal extends BasePage {
 	@FindBy(xpath = "//label[text()='Home Anniversary']//following-sibling::div//*[contains(text(),'Day')]")
 	private WebElement select_DayOfAnniversary;
 
+	@FindBy(xpath = "//*[@id='dateSelect']/div[1]/div/div[2]")
+	private WebElement drpdwn_monthBirth;
+
 	private static final String birthDate = "//*[contains(text(), '%s')]";
 
 	private static final String annivDate = "//*[contains(text(), '%s')]";
+
+	private static final String randomBithMonth = "//*[text()='%s']";
 
 
 	public WebElement getBtn_close() {
@@ -277,16 +278,17 @@ public class AddContactModal extends BasePage {
 	}
 
 	public WebElement select_MonthOfBirthday() {
-		return select_MonthOfBirthday;
+		return monthOfBirthday;
 	}
 
-	public WebElement getDrpdwnOfMonthBirth(){
-		return drpdwn_birthdayMonth;
+	public WebElement selectMonthBirth() {
+		return drpdwn_monthBirth;
 	}
 
-	public void setBirthday(String birthDateValue) {
-		select_MonthOfBirthday.click();
-		world.driver.findElement(By.xpath(String.format(birthDate, birthDateValue))).click();
+
+	public String setBirthday(String birthDateValue) {
+		monthOfBirthday.click();
+		return String.valueOf(world.driver.findElement(By.xpath(String.format(birthDate, birthDateValue))));
 	}
 
 	public void setDayBirthday(String birthDateValue) {
@@ -315,59 +317,63 @@ public class AddContactModal extends BasePage {
 		world.driver.findElement(By.xpath(String.format(annivDate, annivDateValue))).click();
 	}
 
-
-	public void selectARandomMonth() {
-		select_MonthOfBirthday.click();
-		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[1]/div/div[2]/div"));
+	public WebElement selectARandomMonth() {
+		//monthOfBirthday.click();
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[1]/div/div[2]/div/div"));
 		Random rand = new Random();
-		int randomNumber = rand.nextInt(itemsInDropdown.size());
-		itemsInDropdown.get(randomNumber).click();
-		System.out.println(randomNumber);
+		int randomMonth = rand.nextInt(itemsInDropdown.size());
+		WebElement randomMonthOfBirth = itemsInDropdown.get(randomMonth);
+		System.out.println(randomMonth);
+		return randomMonthOfBirth;
 	}
 
-	public void selectARandomDay() {
+	public WebElement selectARandomDay() {
 		select_DayOfBirthday.click();
-		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[2]/div/div[2]/div"));
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[2]/div/div[2]/div/div"));
 		Random rand = new Random();
 		int randomNumber = rand.nextInt(itemsInDropdown.size());
-		itemsInDropdown.get(randomNumber).click();
+		WebElement randomDayOfBirth = itemsInDropdown.get(randomNumber);
 		System.out.println(randomNumber);
+		return randomDayOfBirth;
 	}
 
-	public void selectARandomYear() {
+	public WebElement selectARandomYear() {
 		select_YearOfBirthday.click();
-		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[3]/div/div[2]/div"));
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[3]/div/div[2]/div/div"));
 		Random rand = new Random();
 		int randomNumber = rand.nextInt(itemsInDropdown.size());
-		itemsInDropdown.get(randomNumber).click();
+		WebElement randomYearOfBirth  = itemsInDropdown.get(randomNumber);
 		System.out.println(randomNumber);
+		return randomYearOfBirth;
 	}
 
-	public void selectARandomMonthOfAnniv() {
+	public WebElement selectARandomMonthOfAnniv() {
 		select_MonthOfAnniversary.click();
-		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[1]/div/div[2]/div"));
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[1]/div/div[2]/div/div"));
 		Random rand = new Random();
 		int randomNumber = rand.nextInt(itemsInDropdown.size());
-		String month = String.valueOf(Month.values()[randomNumber]);
-		itemsInDropdown.get(randomNumber).click();
+		WebElement randomMonth = itemsInDropdown.get(randomNumber);
 		System.out.println(rand);
+		return randomMonth;
 	}
 
-	public void selectARandomDayOfAnniv() {
+	public WebElement selectARandomDayOfAnniv() {
 		select_DayOfAnniversary.click();
-		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[2]/div/div[2]/div"));
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[2]/div/div[2]/div/div"));
 		Random rand = new Random();
 		int randomNumber = rand.nextInt(itemsInDropdown.size());
-		itemsInDropdown.get(randomNumber).click();
+		WebElement randomDay = itemsInDropdown.get(randomNumber);
 		System.out.println(itemsInDropdown.get(randomNumber));
+		return randomDay;
 	}
 
-	public void selectARandomYearOfAnniv() {
+	public WebElement selectARandomYearOfAnniv() {
 		select_YearOfAnniversary.click();
-		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[3]/div/div[2]/div"));
+		List<WebElement> itemsInDropdown = world.driver.findElements(By.xpath("//*[@id='dateSelect']/div[3]/div/div[2]/div/div"));
 		Random rand = new Random();
 		int randomNumber = rand.nextInt(itemsInDropdown.size());
-		itemsInDropdown.get(randomNumber).click();
+		WebElement randomYear = itemsInDropdown.get(randomNumber);
 		System.out.println(itemsInDropdown.get(randomNumber));
+		return randomYear;
 	}
 }
