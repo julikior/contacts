@@ -23,6 +23,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
@@ -82,37 +83,6 @@ public class AddContactSteps extends BasePage {
         //Full Name
         addContact.fillTxt_fullName().sendKeys(nameValue);
         Assert.assertTrue("contact name is displayed", addContact.fillTxt_fullName().isDisplayed());
-
-
-
-        /**
-         //Legal Name
-         addContact.getlink_addLegalName().click();
-         contactsHome.scrollElementIntoView(addContact.gettxt_addLegalName());
-         addContact.gettxt_addLegalName().click();
-         addContact.gettxt_addLegalName().sendKeys(nameValue);
-
-         //Email Address
-         addContact.gettxt_newContactEmail().click();
-         addContact.gettxt_newContactEmail().sendKeys(nameValue + "@gmail.com");
-
-         //Phone Number
-         addContact.gettxt_newContactPhoneNumber().click();
-         addContact.gettxt_newContactPhoneNumber().sendKeys("2818191011");
-
-         //Address
-         addContact.gettxt_address().click();
-         addContact.gettxt_address().sendKeys("311 California Street");
-         wait.until(ExpectedConditions.visibilityOf(addContact.getselect_addressToSelect()));
-         contactsHome.scrollElementIntoView(addContact.getselect_addressToSelect());
-         addContact.getselect_addressToSelect().click();
-
-         //Apartment Number
-         wait.until(ExpectedConditions.visibilityOf(addContact.gettxt_apartment()));
-         //Thread.sleep(1000);
-         addContact.gettxt_apartment().click();
-         addContact.gettxt_apartment().sendKeys("201");
-         **/
     }
 
     @When("^I click on 'Save Contact' button$")
@@ -246,9 +216,8 @@ public class AddContactSteps extends BasePage {
         expectedContact.setLegalName(data.get(0).get("Legal Name"));
         expectedContact.setDescription(data.get(0).get("Description"));
         expectedContact.setJobTitle(data.get(0).get("Job Title"));
-        //expectedContact.setBirthday();
-        //expectedContact.setHomeAnniversary();
-
+        expectedContact.setRelationName(data.get(0).get("Relation Name"));
+        expectedContact.setCompanyName(data.get(0).get("Company Name"));
 
         // Full Name
         expectedContact.setNameValue(nameValue);
@@ -355,54 +324,20 @@ public class AddContactSteps extends BasePage {
 
     @When("^I select a relationship$")
     public void i_select_a_relationship() {
-        WebElement relationDropDown = world.driver
-                .findElement(By.xpath("(//div[@class='css-1g6gooi'])"));
-        contactsHome.scrollElementIntoView(relationDropDown);
-        relationDropDown.click();
-
-        WebElement textField = world.driver
-                .findElement(By.xpath("(//div[@class='css-1pcexqc-container select'])[11]/div/div/div[2]/div/input"));
-        textField.sendKeys("Greg Smith");
-        world.driver.findElement(By.xpath("//button[@id='create-contact-btn']")).click();
-
-        int count = 1;
-        do {
-            try {
-                relationDropDown.findElement(By.xpath("//div[contains(@class, 'select__menu-list')]//div[contains(@text(), 'Greg Smith')]"));
-            } catch (NoSuchElementException e) {
-                count++;
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-            }
-        } while (count < 200);
-        //WebElement elem = relationDropDown.findElement(By.xpath("//div[contains(@class, 'select__menu-list')]/div/div[2]"));
-        //wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(relationDropDown, By.xpath("//div[contains(@class, 'select__menu-list')]/div/div[2]")));
-        relationDropDown.findElement(By.xpath("//div[contains(@class, 'select__menu-list')]/div/div[2]")).click();
+        contactsHome.scrollElementIntoView(addContact.selectRelation());
+        addContact.selectRelation().click();
+        wait.until(ExpectedConditions.elementToBeClickable(addContact.txtInputRelation()));
+        addContact.txtInputRelation().sendKeys(expectedContact.getRelationName());
+        WebDriverWait wait = new WebDriverWait(world.driver, 10);
+        wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(addContact.selectRelatName(),
+                By.xpath("//*[@id=\"about-section-v2\"]/div[5]/div/div/div[1]/div/div/div[2]/div/div[1]/div/div[2]/div/div[contains(text(), 'juliTest')]")));
+        addContact.selectRelatName().click();
     }
 
-    @When("^I select a company name$")
-    public void i_select_a_company_name() {
-        world.driver.findElement(By.xpath("//input[@id='react-select-23-input']")).sendKeys("KW");
-
-        WebElement companyDropDown = world.driver
-                .findElement(By.xpath("(//div[@class='css-1pcexqc-container select'])[12]"));
-        contactsHome.scrollElementIntoView(companyDropDown);
-        companyDropDown.click();
-        wait.until(ExpectedConditions.visibilityOf(companyDropDown.findElement(By.xpath("./div[2]/div"))));
-        WebElement textField = world.driver
-                .findElement(By.xpath("(//div[@class='css-1pcexqc-container select'])[10]/div/div/div[2]/div/input"));
-        textField.sendKeys("KW");
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        companyDropDown.findElement(By.xpath("./div[2]/div")).click();
+    @When("^I select a company name")
+    public void iSelectACompanyName() {
+        addContact.txtCompanyName().click();
+        addContact.veirfyCompanyNameExist();
     }
 
     @When("^I enter a job title$")
@@ -414,13 +349,9 @@ public class AddContactSteps extends BasePage {
     @And("I select a home anniversary with random date")
     public void iSelectAHomeAnniversary() {
         int randomMonth = addContact.selectARandomMonthOfAnniv();
-
         int randomDay = addContact.selectARandomDayOfAnniv();
-
         int randomYear = addContact.selectARandomYearOfAnniv();
-
-        String anniversary = String.valueOf(Month.values()[randomMonth]) + " " + String.valueOf(randomDay+1) + ", " + (Calendar.getInstance().get(Calendar.YEAR) - randomYear);
-
+        String anniversary = (Month.values()[randomMonth]) + " " + (randomDay+1) + ", " + (Calendar.getInstance().get(Calendar.YEAR) - randomYear);
         expectedContact.setHomeAnniversary(anniversary);
     }
 
@@ -428,15 +359,11 @@ public class AddContactSteps extends BasePage {
     public void iSelectADateOfBirthWithRandomDate() {
         addContact.select_MonthOfBirthday().click();
         wait.until(ExpectedConditions.visibilityOf(addContact.selectMonthBirth()));
-        WebElement randomMonthOfBirth = addContact.selectARandomMonth();
-        randomMonthOfBirth.click();
-        WebElement randomDayOfBirth = addContact.selectARandomDay();
-        randomDayOfBirth.click();
-        WebElement randomYearOfBirth = addContact.selectARandomYear();
-        randomYearOfBirth.click();
-
-        //String selectedBirth = String.join(" ", randomMonthOfBirth.getText(), randomDayOfBirth.getText() + ",", randomYearOfBirth.getText());
-        //System.out.println(selectedBirth);
+        int randomMonthOfBirth = addContact.selectARandomMonth();
+        int randomDayOfBirth = addContact.selectARandomDay();
+        int randomYearOfBirth = addContact.selectARandomYear();
+        String birthday = (Month.values()[randomMonthOfBirth]) + " " + (randomDayOfBirth+1) + ", " + (Calendar.getInstance().get(Calendar.YEAR) - randomYearOfBirth);
+        expectedContact.setBirthday(birthday);
     }
 
     @Then("I verify contact data")
@@ -444,4 +371,5 @@ public class AddContactSteps extends BasePage {
         Contacts actualContacts = ContactsDetailPage.getContactData();
         assertReflectionEquals(expectedContact, actualContacts);
     }
+
 }

@@ -27,12 +27,13 @@ Feature: Contact Management - Create a new contact
   Scenario: Creating a new contact with mandatory fields
     When I click on 'Add new contact' button
     And I fill in Add Contacts Modal with following data
-      | Full Name               | Email Address                      | Phone Number |  Additional Email                  | Additional Phone | Primary Address       | Apartment Num | Legal Name        | Description                | Job Title  |
-      | AutoUser + randomstr    | "name"+randomstr@gmail.com         |  2818181011  | additional+`name`+random@gmail.com | 2818181012       | 311 California Street | 201           |AutoUser LegalName | Contact background info... | Engineer   |
+      | Full Name               | Email Address                      | Phone Number |  Additional Email                  | Additional Phone | Primary Address       | Apartment Num | Legal Name        | Description                | Job Title  | Relation Name | Company Name |
+      | AutoUser + randomstr    | "name"+randomstr@gmail.com         |  2818181011  | additional+`name`+random@gmail.com | 2818181012       | 311 California Street | 201           |AutoUser LegalName | Contact background info... | Engineer   | juliTest      | KW           |
+    #And I select Mark as Lead
     And I select a date of birth with random date
     And I select a home anniversary with random date
-    #And I select a relationship
-    #And I select a company name
+    And I select a relationship
+    And I select a company name
     And I enter a job title
     #Sale Pipeline
     And I select a stage as captured

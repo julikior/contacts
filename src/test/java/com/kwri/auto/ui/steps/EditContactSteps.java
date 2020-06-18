@@ -2,6 +2,7 @@ package com.kwri.auto.ui.steps;
 
 import com.kwri.auto.ui.pages.ContactsDetailPage;
 import com.kwri.auto.ui.pages.ContactsPage;
+import cucumber.api.java.en.And;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -38,13 +39,4 @@ public class EditContactSteps extends BasePage {
         wait.until(ExpectedConditions.visibilityOf(contactsDetailPage.clickspan_EditIcon()));
         contactsDetailPage.clickspan_EditIcon().click();
     }
-
-
-
-
-
-
-
-
-
 }

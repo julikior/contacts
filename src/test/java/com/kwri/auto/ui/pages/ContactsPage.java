@@ -347,11 +347,6 @@ public class ContactsPage extends BasePage {
 		common.waitAndClick(50, getTxt_contactsSearch());
 		this.getTxt_contactsSearch().sendKeys(contactName);
 		this.wait_Until_Contact_Table_Loads();
-
-		/*if(shouldExist){Assert.assertTrue((world.driver.findElement(By.xpath("//div[contains(text(), '" +
-				contactName.replaceAll("AutoUser", "") + "')]")).isDisplayed()), contactName + " was not found");}
-		else{Assert.assertFalse((world.driver.findElements(By.xpath("//div[contains(text(), '" +
-				contactName.replaceAll("AutoUser", "") + "')]")).size() > 0), contactName + " still exists");}*/
 	}
 
 }

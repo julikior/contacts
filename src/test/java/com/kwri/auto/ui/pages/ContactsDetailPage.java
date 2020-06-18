@@ -61,7 +61,7 @@ public class ContactsDetailPage extends BasePage {
 	@FindBy(xpath = "//*[@id='socialLogo']")
 	private WebElement img_SocialLogo;
 
-	private static final String contactAttribute = "//*[text()='%s']/ancestor::div[2]/div[2]";
+	private static final String contactAttribute = "//*[text()='%s']//ancestor::div[2]/div[2]";
 
 	private static final String contactName = "//*[@id='contact-name']/h2";
 
@@ -78,6 +78,8 @@ public class ContactsDetailPage extends BasePage {
 	private static String primaryAddress = "//*[@id='mainHomeAddress']//ancestor::div[1]/p[1]";
 
 	private static String socialProfile = "//*[contains(@href, 'https://www.facebook.com')]";
+
+	private static String link_relationName = "//*[@id='relationName']";
 
 	public WebElement clickIcon_archive() { return icon_archive; }
 
@@ -144,6 +146,8 @@ public class ContactsDetailPage extends BasePage {
 		contact.setSocialProfile(getSocialProfile());
 		contact.setBirthday(getContactAttribute("Birthday"));
 		contact.setHomeAnniversary(getContactAttribute("Home Anniversary"));
+		contact.setRelationName(getRelationship());
+		contact.setCompanyName(getContactAttribute("Company"));
 
 		return contact;
 	}
@@ -186,6 +190,11 @@ public class ContactsDetailPage extends BasePage {
 
 	private String getSocialProfile() {
 		return world.driver.findElement(By.xpath(ContactsDetailPage.socialProfile)).getAttribute("href");
+	}
+
+	private String getRelationship() {
+		return world.driver.findElement(By.xpath(ContactsDetailPage.link_relationName)).getText();
+		//return relationships.replaceAll("\\(Spouse\\)", "");
 	}
 
 }
