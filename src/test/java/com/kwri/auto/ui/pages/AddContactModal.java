@@ -1,5 +1,6 @@
 package com.kwri.auto.ui.pages;
 
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -407,10 +408,11 @@ public class AddContactModal extends BasePage {
 		return randomNumber;
 	}
 
-	public void veirfyCompanyNameExist() {
+	public void veirfyCompanyNameExist(String company) {
+		txtCompanyName().click();
 		this.listCompNames();
 
-		if(world.driver.getPageSource().contains("KW")){
+		if(world.driver.getPageSource().contains(company)){
 			wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(listCompNames(),
 					By.xpath("//div[@id='about-section-v2']/div[6]/div/div/div/div/div[2]/div/div")));
 			getSelectCompanyName().click();
@@ -420,6 +422,21 @@ public class AddContactModal extends BasePage {
 		}
 	}
 
+	public void setRelationship(String relationName){
+		selectRelation().click();
+		wait.until(ExpectedConditions.elementToBeClickable(txtInputRelation()));
+		txtInputRelation().sendKeys(relationName);
+		WebDriverWait wait = new WebDriverWait(world.driver, 10);
+		wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(selectRelatName(),
+				By.xpath(String.format("//*[@id='about-section-v2']/div[5]/div/div/div[1]/div/div/div[2]/div/div[1]/div/div[2]/div/div[contains(text(), '%s')]", relationName))));
+		selectRelatName().click();
+	}
+
+	public void setDescription(String description){
+		wait.until(ExpectedConditions.elementToBeClickable(getTxt_description()));
+		getTxt_description().sendKeys(description);
+		Assert.assertTrue("Description is entered", getTxt_description().isDisplayed());
+	}
 
 
 }

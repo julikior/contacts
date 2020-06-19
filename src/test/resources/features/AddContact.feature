@@ -24,24 +24,25 @@ Feature: Contact Management - Create a new contact
     And I log out of Console
 
   @AddContactWithAllFields @COM-11777
-  Scenario: Creating a new contact with mandatory fields
+  Scenario Outline: Creating a new contact with mandatory fields
     When I click on 'Add new contact' button
     And I fill in Add Contacts Modal with following data
-      | Full Name               | Email Address                      | Phone Number |  Additional Email                  | Additional Phone | Primary Address       | Apartment Num | Legal Name        | Description                | Job Title  | Relation Name | Company Name |
-      | AutoUser + randomstr    | "name"+randomstr@gmail.com         |  2818181011  | additional+`name`+random@gmail.com | 2818181012       | 311 California Street | 201           |AutoUser LegalName | Contact background info... | Engineer   | juliTest      | KW           |
+      | Full Name    | Email Address                 | Phone Number    |  Additional Email                                 | Additional Phone   | Primary Address  | Apartment Num | Legal Name        | Description                | Job Title  | Relation Name | Company Name |
+      | <FullName>   | <FullName> + <EmailAddress>   |  <PhoneNumber>  | additional + <AdditionalEmail> + random@gmail.com | <AdditionalPhone>  | <PrimaryAddress> | 201           |AutoUser LegalName | Contact background info... | Engineer   | juliTest      | KW           |
     #And I select Mark as Lead
     And I select a date of birth with random date
     And I select a home anniversary with random date
-    And I select a relationship
-    And I select a company name
     And I enter a job title
-    #Sale Pipeline
     And I select a stage as captured
     And I click on 'Save Contact' button
     Then I verify that the a new contact is added "true" to the contact list
     And I select a contact 'AutoUser' to see contact details
     Then I verify contact data
     And I log out of Console
+
+    Examples:
+      | FullName               | EmailAddress          | PhoneNumber  |  AdditionalEmail                   | AdditionalPhone | PrimaryAddress        | ApartmentNum | LegalName         | Description                | JobTitle  | RelationName | CompanyName |
+      | AutoUser + randomstr   | randomstr@gmail.com   |  2818181011  | additional+`name`+random@gmail.com | 2818181012      | 311 California Street | 201          |AutoUser LegalName | Contact background info... | Engineer  | juliTest     | KW          |
 
   @AddContactWithInvalidEmail @COM-11764
   Scenario Outline: Create a new contact with invalid email

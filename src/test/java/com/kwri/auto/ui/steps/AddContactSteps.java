@@ -218,13 +218,16 @@ public class AddContactSteps extends BasePage {
         expectedContact.setJobTitle(data.get(0).get("Job Title"));
         expectedContact.setRelationName(data.get(0).get("Relation Name"));
         expectedContact.setCompanyName(data.get(0).get("Company Name"));
+        expectedContact.setNameValue(nameValue);
+        expectedContact.setEmail(nameValue + ".primary"+ "@gmail.com");
+        expectedContact.setAddEmail(nameValue + ".additional"+ "@gmail.com");
+        expectedContact.setSocialProfile("https://www.facebook.com/" + expectedContact.getNameValue());
 
         // Full Name
-        expectedContact.setNameValue(nameValue);
+
         addContact.fillTxt_fullName().sendKeys(expectedContact.getNameValue());
 
         //Primary Email Address
-        expectedContact.setEmail(nameValue + ".primary"+ "@gmail.com");
         addContact.getTxt_primaryEmail().sendKeys(expectedContact.getEmail());
         Assert.assertTrue("Email displayed", addContact.getTxt_primaryEmail().isDisplayed());
 
@@ -245,7 +248,6 @@ public class AddContactSteps extends BasePage {
         //Additional Email Address
         wait.until(ExpectedConditions.visibilityOf(addContact.getTxt_additionalEmail()));
         addContact.getTxt_additionalEmail().click();
-        expectedContact.setAddEmail(nameValue + ".additional"+ "@gmail.com");
         addContact.getTxt_additionalEmail().sendKeys(nameValue + ".additional"+ "@gmail.com");
         Assert.assertTrue("Additional email displayed", addContact.getTxt_additionalEmail().isDisplayed());
 
@@ -268,7 +270,6 @@ public class AddContactSteps extends BasePage {
 
         //Social Profiles
         wait.until(ExpectedConditions.elementToBeClickable(addContact.getTxt_socialProfile()));
-        expectedContact.setSocialProfile("https://www.facebook.com/" + expectedContact.getNameValue());
         addContact.getTxt_socialProfile().clear();
         addContact.getTxt_socialProfile().sendKeys(expectedContact.getNameValue());
 
@@ -280,10 +281,14 @@ public class AddContactSteps extends BasePage {
         Assert.assertTrue("Legal Name entered", addContact.clickTxt_addLegalName().isDisplayed());
 
         //Description
-        wait.until(ExpectedConditions.elementToBeClickable(addContact.getTxt_description()));
-        addContact.getTxt_description().sendKeys(expectedContact.getDescription());
-        Assert.assertTrue("Description is entered", addContact.getTxt_description().isDisplayed());
+        addContact.setDescription(expectedContact.getDescription());
 
+        //RelationShip
+        contactsHome.scrollElementIntoView(addContact.selectRelation());
+        addContact.setRelationship(expectedContact.getRelationName());
+
+        //Company Name
+        addContact.veirfyCompanyNameExist(expectedContact.getCompanyName());
     }
 
     @When("I fill in Add Contacts Modal with invalid phone number {string}")
@@ -324,20 +329,13 @@ public class AddContactSteps extends BasePage {
 
     @When("^I select a relationship$")
     public void i_select_a_relationship() {
-        contactsHome.scrollElementIntoView(addContact.selectRelation());
-        addContact.selectRelation().click();
-        wait.until(ExpectedConditions.elementToBeClickable(addContact.txtInputRelation()));
-        addContact.txtInputRelation().sendKeys(expectedContact.getRelationName());
-        WebDriverWait wait = new WebDriverWait(world.driver, 10);
-        wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(addContact.selectRelatName(),
-                By.xpath("//*[@id=\"about-section-v2\"]/div[5]/div/div/div[1]/div/div/div[2]/div/div[1]/div/div[2]/div/div[contains(text(), 'juliTest')]")));
-        addContact.selectRelatName().click();
+
     }
 
     @When("^I select a company name")
     public void iSelectACompanyName() {
         addContact.txtCompanyName().click();
-        addContact.veirfyCompanyNameExist();
+        addContact.veirfyCompanyNameExist(expectedContact.getCompanyName());
     }
 
     @When("^I enter a job title$")
