@@ -1,7 +1,6 @@
 package com.kwri.auto.ui.pages;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import com.kwri.auto.ui.entities.Contacts;
 import org.openqa.selenium.By;
@@ -348,5 +347,12 @@ public class ContactsPage extends BasePage {
 		this.getTxt_contactsSearch().sendKeys(contactName);
 		this.wait_Until_Contact_Table_Loads();
 	}
+
+	public void clickAddContactButton() {
+		wait.until(ExpectedConditions.visibilityOf(clickbtn_addNewContact()));
+		clickbtn_addNewContact().click();
+	}
+
+
 
 }

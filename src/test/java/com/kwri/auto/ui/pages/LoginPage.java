@@ -105,7 +105,7 @@ public class LoginPage extends BasePage {
 
 	public void logout(){
 		wait.until(ExpectedConditions.visibilityOf(btn_profile));
-		common.waitAndClick(30, btn_profile);
+		common.waitAndClick(100, btn_profile);
 		getBtn_logout().click();
 		world.driver.close();
 	}

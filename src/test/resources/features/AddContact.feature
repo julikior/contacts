@@ -27,9 +27,8 @@ Feature: Contact Management - Create a new contact
   Scenario Outline: Creating a new contact with mandatory fields
     When I click on 'Add new contact' button
     And I fill in Add Contacts Modal with following data
-      | Full Name    | Email Address                 | Phone Number    |  Additional Email                           | Additional Phone   | Primary Address  | Apartment Num | Legal Name        | Description                | Job Title  | Relation Name | Company Name |
-      | <FullName>   | <FullName> + <EmailAddress>   |  <PhoneNumber>  | <FullName> + additional + <AdditionalEmail> | <AdditionalPhone>  | <PrimaryAddress> | 201           |AutoUser LegalName | Contact background info... | Engineer   | juliTest      | KW           |
-    #And I select Mark as Lead
+      | Full Name    | Email Address                 | Phone Number    |  Additional Email                           | Additional Phone   | Primary Address  | Apartment Num   | Legal Name  | Description   | Job Title  | Relation Name  | Company Name  |
+      | <FullName>   | <FullName> + <EmailAddress>   |  <PhoneNumber>  | <FullName> + additional + <AdditionalEmail> | <AdditionalPhone>  | <PrimaryAddress> | <ApartmentNum>  | <LegalName> | <Description> | <JobTitle> | <RelationName> | <CompanyName> |
     And I select a date of birth with random date
     And I select a home anniversary with random date
     And I enter a job title
@@ -38,11 +37,13 @@ Feature: Contact Management - Create a new contact
     Then I verify that the a new contact is added "true" to the contact list
     And I select a contact 'AutoUser' to see contact details
     Then I verify contact data
+    And I archive the contact
     And I log out of Console
 
     Examples:
-      | FullName               | EmailAddress          | PhoneNumber  |  AdditionalEmail                   | AdditionalPhone | PrimaryAddress        | ApartmentNum | LegalName         | Description                | JobTitle  | RelationName | CompanyName |
-      | AutoUser + randomstr   | randomstr@gmail.com   |  2818181011  | random@gmail.com | 2818181012      | 311 California Street | 201          |AutoUser LegalName | Contact background info... | Engineer  | juliTest     | KW          |
+      | FullName               | EmailAddress          | PhoneNumber  |  AdditionalEmail  | AdditionalPhone | PrimaryAddress        | ApartmentNum | LegalName          | Description                 | JobTitle  | RelationName | CompanyName |
+      | AutoUser + randomstr   | randomstr@gmail.com   |  2818181011  | random@gmail.com  | 2818181012      | 311 California Street | 201          | AutoUser LegalName | Contact background info...  | Engineer  | Julie        | New Company |
+      | AutoUser + randomstr   | randomstr@gmail.com   |  2818181013  | random@gmail.com  | 2818181014      | 27 Merry Lane         | -            | Auto2 LName        | Contact info in description | CO        | McDonald     | Coffee      |
 
   @AddContactWithInvalidEmail @COM-11764
   Scenario Outline: Create a new contact with invalid email

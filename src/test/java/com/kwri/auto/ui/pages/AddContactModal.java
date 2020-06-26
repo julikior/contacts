@@ -2,10 +2,13 @@ package com.kwri.auto.ui.pages;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.google.inject.Inject;
@@ -25,13 +28,12 @@ public class AddContactModal extends BasePage {
 		super(world);
 	}
 
+	@Inject
+	ContactsPage contactsHome;
+
 	Common common = new Common(world.driver);
 	WebDriverWait wait = new WebDriverWait(world.driver, 10);
 	Actions actions = new Actions(world.driver);
-
-
-	@FindBy(xpath = "//div[contains(@class,'modal__dialog styles__add-edit-contact')]")
-	private WebElement modal_AddEditContact;
 
 	@FindBy(xpath = "//input[@name='info.fullName']")
 	private WebElement txt_fullName;
@@ -42,14 +44,8 @@ public class AddContactModal extends BasePage {
 	@FindBy(xpath = "//input[@name='addresses[0]']")
 	private WebElement txt_address;
 
-	@FindBy(xpath = "(//div[contains(text(),'311 California Street')])[1]")
-	private WebElement select_addressToSelect;
-
 	@FindBy(xpath = "//*[contains(label, 'Apt/Unit/Suite')]//child::input")
 	private WebElement txt_apartment;
-
-	@FindBy(xpath = "//input[@name='addresses[0].isMailing']")
-	private WebElement radio_sameAsMailingAddress;
 
 	@FindBy(xpath = "//input[@name='emails[0].email']")
 	private WebElement txt_primaryEmail;
@@ -153,67 +149,70 @@ public class AddContactModal extends BasePage {
 	@FindBy(xpath = "//*[@id='about-section-v2']/div[5]/div/div/div[1]/div/div/div[2]/div/div[1]/div/div/div[1]/div[2]/div/input")
 	private WebElement inputRelation;
 
-	@FindBy(xpath = "//*[@id=\"about-section-v2\"]/div[5]/div/div/div[1]/div/div/div[2]/div/div[1]/div/div[2]/div/div[contains(text(), 'juliTest')]")
-	private WebElement relatName;
+	@FindBy(xpath = "//*[@id='about-section-v2']/div[5]/div/div/div[1]/div/div/div[2]/div/div[1]/div/div/div[1]/div[1]")
+	private WebElement txt_RealtionName;
 
 	@FindBy(xpath = "//*[@id='about-section-v2']/div[6]/div[1]/div/div/div/div/div[1]/div[2]/div/input")
 	private WebElement inputCompName;
 
-	@FindBy(xpath = "//*[@id='about-section-v2']/div[6]/div[1]/div/div/div/div[2]/div")
-	private WebElement compDropDown;
-
 	@FindBy(xpath = "//*[@id='about-section-v2']/div[6]/div[1]/div/div/div/div[2]/div/div/div")
 	private WebElement btn_CreateCompany;
 
-	@FindBy(xpath = "//div[@id='about-section-v2']/div[6]/div/div/div/div/div[2]/div/div[text()='KW']")
-	private WebElement selectCompanyName;
+	@FindBy(xpath = "//button[text()='Add']")
+	private WebElement btn_AddRelationships;
 
-	private static final String birthDate = "//*[contains(text(), '%s')]";
+	@FindBy(xpath = "//*[@id='about-section-v2']/div[5]/div/div/div[1]/div/div/div[2]/div/div[1]/div/div[2]/div/div[text() = ('Loading...')]")
+	private WebElement contactLoading;
 
-	private static final String annivDate = "//*[contains(text(), '%s')]";
+	@FindBy(xpath = "//div[@id='about-section-v2']/div[6]/div/div/div/div/div[2]/div/div[text() = ('Loading...')]")
+	private WebElement companyLoading;
 
-	private static final String randomBirthMonth = "//*[text()='%s']";
+	@FindBy(xpath = "//*[@id='about-section-v2']/div[5]/div/div/div[1]/div/div/div[2]/div/div[1]/div/div[2]/div/div")
+	private WebElement firstElement;
+
+	@FindBy(xpath = "//*[@id='about-section-v2']/div[6]/div[1]/div/div/div/div[2]//child::div")
+	private WebElement firstCompElement;
+
+	private static final String relatName = "//*[@id='about-section-v2']/div[5]/div/div/div[1]/div/div/div[2]/div/div[1]/div/div[2]/div/div[contains(text(), '%s')]";
+
+	private static final String selectCompanyName = "//div[@id='about-section-v2']/div[6]/div/div/div/div/div[2]/div/div[text()='%s']";
+
+	private static final String select_primaryAddress = "(//div[contains(text(),'%s')])[1]";
 
 	public WebElement getBtn_close() {
+		common.waitAndClick(50, btn_close);
 		return btn_close;
 	}
 
-	public WebElement getModal_AddEditContact() {
-		return modal_AddEditContact;
-	}
-
 	public WebElement fillTxt_fullName() {
-		common.waitAndClick(100, txt_fullName);
 		return txt_fullName;
 	}
 
 	public WebElement clickTxt_addLegalName() {
-		common.waitAndClick(30, txt_addLegalName);
 		return txt_addLegalName;
 	}
 
-	public WebElement getTxt_address() {
+	public WebElement fillTxt_address() {
 		return txt_address;
 	}
 
-	public WebElement getSelect_addressToSelect() {
-		return select_addressToSelect;
-	}
-
-	public WebElement getTxt_apartment() {
+	public WebElement clickTxt_apartment() {
 		common.waitAndClick(50, txt_apartment);
 		return txt_apartment;
 	}
 
-	public WebElement getTxt_primaryEmail() {
+	public WebElement fillTxt_primaryEmail() {
+		common.waitForElement(30, txt_primaryEmail);
 		return txt_primaryEmail;
 	}
 
-	public WebElement getTxt_additionalEmail() {
+	public WebElement clickTxt_additionalEmail() {
+		common.waitAndClick(30, txt_additionalEmail);
 		return txt_additionalEmail;
 	}
 
-	public WebElement getTxt_primaryPhoneNumber() {
+	public WebElement fillTxt_primaryPhoneNumber() {
+		common.waitForElement(30, txt_primaryPhoneNumber);
 		return txt_primaryPhoneNumber;
 	}
 
@@ -221,15 +220,11 @@ public class AddContactModal extends BasePage {
 		return txt_additionalPhoneNumber;
 	}
 
-	public WebElement getRadio_preferredMethod() {
-		return radio_preferredMethod;
+	public void clickRadio_preferredMethod() {
+		common.waitAndClick(30, radio_preferredMethod);
 	}
 
-	public WebElement getCheckbox_stage() {
-		return checkbox_stage;
-	}
-
-	public WebElement getTxt_socialProfile() {
+	public WebElement fillTxt_socialProfile() {
 		return txt_socialProfile;
 	}
 
@@ -237,7 +232,8 @@ public class AddContactModal extends BasePage {
 		return txt_jobTitle;
 	}
 
-	public WebElement getTxt_description() {
+	public WebElement fillTxt_description() {
+		common.waitAndClick(30, txt_description);
 		return txt_description;
 	}
 
@@ -253,12 +249,12 @@ public class AddContactModal extends BasePage {
 		return input_customField;
 	}
 
-	public WebElement clickBtn_createContact() {
-		return btn_createContact;
+	public void clickBtn_createContact() {
+		common.waitAndClick(30, btn_createContact);
 	}
 
-	public WebElement clickBtn_cancel() {
-		return btn_cancel;
+	public void clickBtn_cancel() {
+		common.waitAndClick(30, btn_cancel);
 	}
 
 	public WebElement clickzone_overlay() {
@@ -266,12 +262,12 @@ public class AddContactModal extends BasePage {
 		return zone_overlay;
 	}
 
-	public WebElement clickAddMoreInfo() {
-		return add_more_info;
+	public void clickAddMoreInfo() {
+		common.waitAndClick(30, add_more_info);
 	}
 
-	public WebElement clickAdditionalContactInfo() {
-		return additional_contact_info;
+	public void clickAdditionalContactInfo() {
+		common.waitAndClick(30, additional_contact_info);
 	}
 
 	public WebElement clickAbout() {
@@ -279,11 +275,12 @@ public class AddContactModal extends BasePage {
 	}
 
 	public WebElement getInvalidErrorMessage() {
+		common.waitForElement(30, error_invalidEmail);
 		return error_invalidEmail;
 	}
 
 	public WebElement getErrorEmail() {
-		common.waitForElement(500, error_email);
+		common.waitForElement(30, error_email);
 		return error_email;
 	}
 
@@ -303,10 +300,6 @@ public class AddContactModal extends BasePage {
 		return monthOfBirthday;
 	}
 
-	public WebElement selectMonthBirth() {
-		return drpdwn_monthBirth;
-	}
-
 	public WebElement selectRelation() {
 		return drpdwn_relationships;
 	}
@@ -315,27 +308,41 @@ public class AddContactModal extends BasePage {
 		return inputRelation;
 	}
 
-	public WebElement selectRelatName() {
-		//common.waitForElement(50, relatName);
-		return relatName;
-	}
-
 	public WebElement txtCompanyName() {
 		return inputCompName;
 	}
 
-	public WebElement listCompNames() {
-		return compDropDown;
+	public WebElement getFirstElement() {
+		return firstElement;
 	}
 
-	public WebElement getBtn_CreateCompany() {
-		return btn_CreateCompany;
+	public WebElement getFirstCompElement() {
+		return firstCompElement;
 	}
 
-	public WebElement getSelectCompanyName() {
-		return selectCompanyName;
+	public void clickTxt_socialProfile(String socialProfile) {
+		common.waitAndClick(30, txt_socialProfile);
+		fillTxt_socialProfile().clear();
+		fillTxt_socialProfile().sendKeys(socialProfile);
 	}
 
+	public void fillJobTitle(String jobTitle) {
+		wait.until(ExpectedConditions.elementToBeClickable(getJobTitleTxt()));
+		getJobTitleTxt().sendKeys(jobTitle);
+	}
+
+	public void fillLegalName(String legalName) {
+		common.waitForElement(30, clickAbout());
+		clickAbout().click();
+		contactsHome.scrollElementIntoView(clickTxt_addLegalName());
+		clickTxt_addLegalName().sendKeys(legalName);
+	}
+
+	public void verifyEmailInUse() {
+		Assert.assertTrue("This email is already in use by another contact", getErrorEmail().isDisplayed());
+		common.waitAndClick(100, btn_close);
+		getBtn_close().click();
+	}
 
 	public int selectARandomMonth() {
 		//monthOfBirthday.click();
@@ -408,35 +415,86 @@ public class AddContactModal extends BasePage {
 		return randomNumber;
 	}
 
-	public void veirfyCompanyNameExist(String company) {
-		txtCompanyName().click();
-		this.listCompNames();
+	private void waitContactsLoading() {
+		try {
+			common.waitForElement(10, contactLoading);
+			common.waitToDisappear(10, contactLoading);
+		} catch (StaleElementReferenceException | TimeoutException e) {
+			e.printStackTrace();
+		}
+	}
 
-		if(world.driver.getPageSource().contains(company)){
-			wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(listCompNames(),
-					By.xpath("//div[@id='about-section-v2']/div[6]/div/div/div/div/div[2]/div/div")));
-			getSelectCompanyName().click();
-			}
-		else{
+	private void waitCompaniesLoading() {
+		try {
+			common.waitForElement(10, companyLoading);
+			common.waitToDisappear(10, companyLoading);
+		} catch (StaleElementReferenceException | TimeoutException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void addCompanyName(String company) {
+		txtCompanyName().click();
+		wait.until(ExpectedConditions.elementToBeClickable(txtCompanyName()));
+		txtCompanyName().sendKeys(company);
+		waitCompaniesLoading();
+
+		if(!(getFirstCompElement().getText().equals("Create Company"))) {
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(selectCompanyName, company)))).click();
+		} else {
 			btn_CreateCompany.click();
 		}
 	}
 
 	public void setRelationship(String relationName){
+		contactsHome.scrollElementIntoView(selectRelation());
 		selectRelation().click();
 		wait.until(ExpectedConditions.elementToBeClickable(txtInputRelation()));
 		txtInputRelation().sendKeys(relationName);
-		WebDriverWait wait = new WebDriverWait(world.driver, 10);
-		wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(selectRelatName(),
-				By.xpath(String.format("//*[@id='about-section-v2']/div[5]/div/div/div[1]/div/div/div[2]/div/div[1]/div/div[2]/div/div[contains(text(), '%s')]", relationName))));
-		selectRelatName().click();
+		waitContactsLoading();
+
+			if (!(getFirstElement().getText().equals("No option"))) {
+				//Relation does not exist
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(relatName, relationName)))).click();
+			}
+			else if(!(getFirstElement().getText().equals(String.format(selectCompanyName, relationName)))) {
+				getFirstElement().click();
+			} else {
+				btn_AddRelationships.click();
+			}
+	}
+
+	public String getTxtRelationName() {
+		common.waitForElement(30, txt_RealtionName);
+		return txt_RealtionName.getText();
 	}
 
 	public void setDescription(String description){
-		wait.until(ExpectedConditions.elementToBeClickable(getTxt_description()));
-		getTxt_description().sendKeys(description);
-		Assert.assertTrue("Description is entered", getTxt_description().isDisplayed());
+		wait.until(ExpectedConditions.elementToBeClickable(fillTxt_description()));
+		fillTxt_description().sendKeys(description);
 	}
 
+	public void fillPrimaryAddress(String primaryAddress) {
+		contactsHome.scrollElementIntoView(fillTxt_address());
+		fillTxt_address().click();
+		fillTxt_address().sendKeys(primaryAddress);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(select_primaryAddress, primaryAddress)))).click();
+	}
 
+	public void selectStageAsCaptured() {
+		common.waitAndClick(30, caret_SalesPipeline);
+		common.waitAndClick(30, checkbox_stage);
+	}
+
+	public void verifyInvalidEmail() {
+		getInvalidErrorMessage();
+		Assert.assertTrue("The error message is displayed",
+				getInvalidErrorMessage().isDisplayed());
+		getBtn_close();
+	}
+
+	public void verifyInvalidPhone() {
+		Assert.assertTrue("The error message is displayed", getErrorPhone().isDisplayed());
+		getBtn_close();
+	}
 }

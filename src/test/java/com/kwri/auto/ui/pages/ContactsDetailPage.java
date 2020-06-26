@@ -4,6 +4,7 @@ import com.kwri.auto.ui.entities.Contacts;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -28,8 +29,11 @@ public class ContactsDetailPage extends BasePage {
 	private static Contacts expectedContact = new Contacts();
 
 
-	@FindBy(xpath = "//span[contains(@class, 'icon icon--archive')]")
+	@FindBy(xpath = "//*[@id='contactIntro']/div[2]/span[3]")
 	private WebElement icon_archive;
+
+	@FindBy(xpath = "//div[8]//child::button[2]")
+	private WebElement btn_archive;
 
 	@FindBy(xpath = "//a[text()='Add Neighborhoods']")
 	private WebElement link_addNeighborhoods;
@@ -117,6 +121,14 @@ public class ContactsDetailPage extends BasePage {
 		return img_SocialLogo;
 	}
 
+	public WebElement clickArchive() {
+		return icon_archive;
+	}
+
+	public WebElement clickBtnArchive() {
+		return btn_archive;
+	}
+
 	public enum TimelineItems {
 		TODAY, WEEK, MONTH, ALL
 	}
@@ -194,7 +206,15 @@ public class ContactsDetailPage extends BasePage {
 
 	private String getRelationship() {
 		return world.driver.findElement(By.xpath(ContactsDetailPage.link_relationName)).getText();
-		//return relationships.replaceAll("\\(Spouse\\)", "");
 	}
+
+	public void getArchiveIcon() {
+		Actions actions = new Actions(world.driver);
+		actions.moveToElement(clickArchive()).click().build().perform();
+		wait.until(ExpectedConditions.elementToBeClickable(clickBtnArchive()));
+		clickBtnArchive().click();
+	}
+
+
 
 }

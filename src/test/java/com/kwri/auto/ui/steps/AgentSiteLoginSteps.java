@@ -69,7 +69,7 @@ public class AgentSiteLoginSteps extends BasePage  {
 	//	addContact.fillTxt_fullName().sendKeys("First Last");
 
 		// Primary Email Address
-		addContact.getTxt_primaryEmail().sendKeys(CreateRandomEmail());
+		addContact.fillTxt_primaryEmail().sendKeys(CreateRandomEmail());
 		
 	}
 	
