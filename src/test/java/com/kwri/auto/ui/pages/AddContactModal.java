@@ -453,13 +453,11 @@ public class AddContactModal extends BasePage {
 		txtInputRelation().sendKeys(relationName);
 		waitContactsLoading();
 
-			if (!(getFirstElement().getText().equals("No option"))) {
+			if (!(getFirstElement().getText().equals("No options"))) {
 				//Relation does not exist
 				wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(relatName, relationName)))).click();
 			}
-			else if(!(getFirstElement().getText().equals(String.format(selectCompanyName, relationName)))) {
-				getFirstElement().click();
-			} else {
+			else {
 				btn_AddRelationships.click();
 			}
 	}

@@ -30,9 +30,6 @@ import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEqua
 
 public class AddContactSteps extends BasePage {
 
-    static String nameValue = "AutoUser" + RandomStringUtils.random(5, true, false);
-    static String email = "AutoUser" + RandomStringUtils.random(5, true, false) + "@test.com";
-
     @Inject
     public AddContactSteps(World world) {
         super(world);
@@ -59,15 +56,15 @@ public class AddContactSteps extends BasePage {
     @When("^I create user wih email$")
     public void i_create_user_with_email() {
         //Full Name
-        addContact.fillTxt_fullName().sendKeys(nameValue);
-        addContact.fillTxt_primaryEmail().sendKeys(email);
+        addContact.fillTxt_fullName().sendKeys(expectedContact.getNameValue());
+        addContact.fillTxt_primaryEmail().sendKeys(expectedContact.getEmail());
     }
 
     @When("^I create user wih the same email$")
     public void i_create_user_with_the_same_email() {
         //Full Name
-        addContact.fillTxt_fullName().sendKeys(nameValue);
-        addContact.fillTxt_primaryEmail().sendKeys(email);
+        addContact.fillTxt_fullName().sendKeys(expectedContact.getNameValue());
+        addContact.fillTxt_primaryEmail().sendKeys(expectedContact.getEmail());
     }
 
     @Then("I verify that 'This email is already in use' error is displayed")
@@ -78,13 +75,13 @@ public class AddContactSteps extends BasePage {
     @When("^Enter details on add new contact form$")
     public void enter_details_on_form_as() {
         //Full Name
-        addContact.fillTxt_fullName().sendKeys(nameValue);
+        addContact.fillTxt_fullName().sendKeys(expectedContact.getNameValue());
     }
 
     @When("^I click on 'Save Contact' button$")
     public void i_click_on_Save_Contact_button() {
         addContact.clickBtn_createContact();
-        System.out.println(nameValue);
+        System.out.println(expectedContact.getNameValue());
     }
 
     @When("^I click on 'Cancel' button$")
@@ -94,8 +91,8 @@ public class AddContactSteps extends BasePage {
 
     @Then("^I verify that the a new contact is added \"([^\"]*)\" to the contact list$")
     public void i_verify_that_the_a_new_contact_is_added_to_the_contact_list(String shouldExist) throws Throwable {
-        System.out.println("yaha hai ..  " + nameValue);
-        contactsHome.verifyContactExists(nameValue, Boolean.parseBoolean(shouldExist));
+        System.out.println("yaha hai ..  " + expectedContact.getNameValue());
+        contactsHome.verifyContactExists(expectedContact.getNameValue(), Boolean.parseBoolean(shouldExist));
     }
 
     @When("^I select a preferred method$")
@@ -153,7 +150,7 @@ public class AddContactSteps extends BasePage {
 
     @When("^I add a social profile$")
     public void i_add_a_social_profile() {
-        addContact.fillTxt_socialProfile().sendKeys(nameValue);
+        addContact.fillTxt_socialProfile().sendKeys(expectedContact.getNameValue());
     }
 
     @When("^I select a transaction time frame$")
@@ -196,10 +193,13 @@ public class AddContactSteps extends BasePage {
     public void iCreateWithFollowingData(DataTable dataTable) {
         List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
 
+        String nameValue = "AutoUser" + RandomStringUtils.random(5, true, false);
+        String email = "AutoUser" + RandomStringUtils.random(5, true, false) + "@test.com";
+
+        nameValue = "AutoUser" + RandomStringUtils.random(5, true, false);
         expectedContact.setNameValue(data.get(0).get(nameValue));
-        expectedContact.setEmail(data.get(0).get("Email Address"));
+        expectedContact.setEmail(data.get(0).get(email));
         expectedContact.setPhoneNumber(data.get(0).get("Phone Number"));
-        expectedContact.setAddEmail(data.get(0).get("Additional Email"));
         expectedContact.setAddPhone(data.get(0).get("Additional Phone"));
         expectedContact.setPrimaryAddress(data.get(0).get("Primary Address"));
         expectedContact.setApartmentNum(data.get(0).get("Apartment Num"));
