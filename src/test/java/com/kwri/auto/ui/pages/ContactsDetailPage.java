@@ -29,10 +29,10 @@ public class ContactsDetailPage extends BasePage {
 	private static Contacts expectedContact = new Contacts();
 
 
-	@FindBy(xpath = "//*[@id='contactIntro']/div[2]/span[3]")
+	@FindBy(xpath = "//*[@id='contactIntro']/div[2]/span[3]/span")
 	private WebElement icon_archive;
 
-	@FindBy(xpath = "//div[8]//child::button[2]")
+	@FindBy(xpath = "//div[8]/div/div[1]/div/div[3]/div/div/div/button[2]")
 	private WebElement btn_archive;
 
 	@FindBy(xpath = "//a[text()='Add Neighborhoods']")
@@ -85,7 +85,10 @@ public class ContactsDetailPage extends BasePage {
 
 	private static String link_relationName = "//*[@id='relationName']";
 
-	public WebElement clickIcon_archive() { return icon_archive; }
+	public WebElement clickIcon_archive() {
+		common.waitForElement(30, icon_archive);
+		return icon_archive;
+	}
 
 	public WebElement clickLink_AddActivity() { return link_AddActivity; }
 
@@ -121,13 +124,14 @@ public class ContactsDetailPage extends BasePage {
 		return img_SocialLogo;
 	}
 
-	public WebElement clickArchive() {
+	/*public WebElement clickArchive() {
 		return icon_archive;
-	}
+	}*/
 
-	public WebElement clickBtnArchive() {
+	/*public WebElement clickBtnArchive() {
+		common.waitForElement(30, btn_archive);
 		return btn_archive;
-	}
+	}*/
 
 	public enum TimelineItems {
 		TODAY, WEEK, MONTH, ALL
@@ -210,9 +214,9 @@ public class ContactsDetailPage extends BasePage {
 
 	public void getArchiveIcon() {
 		Actions actions = new Actions(world.driver);
-		actions.moveToElement(clickArchive()).click().build().perform();
-		wait.until(ExpectedConditions.elementToBeClickable(clickBtnArchive()));
-		clickBtnArchive().click();
+		wait.until(ExpectedConditions.elementToBeClickable(icon_archive));
+		actions.moveToElement(icon_archive).click().build().perform();
+		wait.until(ExpectedConditions.elementToBeClickable(btn_archive)).click();
 	}
 
 

@@ -48,6 +48,8 @@ public class AddContactSteps extends BasePage {
     WebDriverWait wait = new WebDriverWait(world.driver, 10);
     private static Contacts expectedContact = new Contacts();
 
+    String nameValue = "AutoUser" + RandomStringUtils.random(5, true, false);
+
     @When("^I click on 'Add new contact' button$")
     public void i_click_on_Add_new_contact_button() throws Throwable {
         contactsHome.clickAddContactButton();
@@ -56,15 +58,19 @@ public class AddContactSteps extends BasePage {
     @When("^I create user wih email$")
     public void i_create_user_with_email() {
         //Full Name
-        addContact.fillTxt_fullName().sendKeys(expectedContact.getNameValue());
-        addContact.fillTxt_primaryEmail().sendKeys(expectedContact.getEmail());
+        addContact.fillTxt_fullName().sendKeys(nameValue);
+        expectedContact.setNameValue(nameValue);
+        addContact.fillTxt_primaryEmail().sendKeys(nameValue + ".primary"+ "@gmail.com");
+        expectedContact.setEmail(nameValue + ".primary"+ "@gmail.com");
     }
 
     @When("^I create user wih the same email$")
     public void i_create_user_with_the_same_email() {
         //Full Name
         addContact.fillTxt_fullName().sendKeys(expectedContact.getNameValue());
+        expectedContact.setNameValue(nameValue);
         addContact.fillTxt_primaryEmail().sendKeys(expectedContact.getEmail());
+        expectedContact.setEmail(nameValue + ".primary"+ "@gmail.com");
     }
 
     @Then("I verify that 'This email is already in use' error is displayed")
@@ -75,7 +81,8 @@ public class AddContactSteps extends BasePage {
     @When("^Enter details on add new contact form$")
     public void enter_details_on_form_as() {
         //Full Name
-        addContact.fillTxt_fullName().sendKeys(expectedContact.getNameValue());
+        addContact.fillTxt_fullName().sendKeys(nameValue);
+        expectedContact.setNameValue(nameValue);
     }
 
     @When("^I click on 'Save Contact' button$")
@@ -148,11 +155,6 @@ public class AddContactSteps extends BasePage {
         addContact.setDescription(expectedContact.getDescription());
     }
 
-    @When("^I add a social profile$")
-    public void i_add_a_social_profile() {
-        addContact.fillTxt_socialProfile().sendKeys(expectedContact.getNameValue());
-    }
-
     @When("^I select a transaction time frame$")
     public void i_select_a_transaction_time_frame() {
         WebElement transactionDropDown = world.driver
@@ -189,17 +191,14 @@ public class AddContactSteps extends BasePage {
         addContact.getInput_customField().sendKeys("Custom Agent PTest");
     }
 
-    @When("I fill in Add Contacts Modal with following data")
-    public void iCreateWithFollowingData(DataTable dataTable) {
-        List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
+    private void createContact(List<Map<String, String>> data) {
 
         String nameValue = "AutoUser" + RandomStringUtils.random(5, true, false);
-        String email = "AutoUser" + RandomStringUtils.random(5, true, false) + "@test.com";
 
-        nameValue = "AutoUser" + RandomStringUtils.random(5, true, false);
-        expectedContact.setNameValue(data.get(0).get(nameValue));
-        expectedContact.setEmail(data.get(0).get(email));
+        expectedContact.setNameValue(nameValue);
+        expectedContact.setEmail(nameValue + ".primary"+ "@gmail.com");
         expectedContact.setPhoneNumber(data.get(0).get("Phone Number"));
+        expectedContact.setAddEmail(nameValue + ".additional"+ "@gmail.com");
         expectedContact.setAddPhone(data.get(0).get("Additional Phone"));
         expectedContact.setPrimaryAddress(data.get(0).get("Primary Address"));
         expectedContact.setApartmentNum(data.get(0).get("Apartment Num"));
@@ -208,10 +207,13 @@ public class AddContactSteps extends BasePage {
         expectedContact.setJobTitle(data.get(0).get("Job Title"));
         expectedContact.setRelationName(data.get(0).get("Relation Name"));
         expectedContact.setCompanyName(data.get(0).get("Company Name"));
-        expectedContact.setNameValue(nameValue);
-        expectedContact.setEmail(nameValue + ".primary"+ "@gmail.com");
-        expectedContact.setAddEmail(nameValue + ".additional"+ "@gmail.com");
         expectedContact.setSocialProfile("https://www.facebook.com/" + expectedContact.getNameValue());
+    }
+
+    @When("I fill in Add Contacts Modal with following data")
+    public void iCreateWithFollowingData(DataTable dataTable) {
+        List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
+        createContact(data);
 
         // Full Name
         addContact.fillTxt_fullName().sendKeys(expectedContact.getNameValue());
@@ -232,13 +234,12 @@ public class AddContactSteps extends BasePage {
         addContact.clickRadio_preferredMethod();
 
         //Additional Email Address
-        addContact.clickTxt_additionalEmail().sendKeys(nameValue + ".additional"+ "@gmail.com");
+        addContact.clickTxt_additionalEmail().sendKeys(expectedContact.getAddEmail());
 
         //Additional Phone Number
         addContact.getTxt_additionalPhoneNumber().sendKeys(expectedContact.getAddPhone());
 
         //Primary Address
-        //addContact.fillPrimaryAddress();
         addContact.fillPrimaryAddress(expectedContact.getPrimaryAddress());
 
         //Apartment Number
@@ -247,9 +248,6 @@ public class AddContactSteps extends BasePage {
         //Social Profiles
         addContact.clickTxt_socialProfile(expectedContact.getNameValue());
 
-        //click and expand - About
-        //addContact.clickAbout().click();
-
         //Legal Name
         addContact.fillLegalName(expectedContact.getLegalName());
 
@@ -257,17 +255,18 @@ public class AddContactSteps extends BasePage {
         addContact.setDescription(expectedContact.getDescription());
 
         //RelationShip
-        addContact.setRelationship(expectedContact.getRelationName());
-        expectedContact.setRelationName(addContact.getTxtRelationName());
+        //addContact.setRelationship();
+        expectedContact.setRelationName(addContact.setRelationship(expectedContact.getRelationName()));
 
         //Company Name
-        addContact.addCompanyName(expectedContact.getCompanyName());
+        //addContact.addCompanyName(expectedContact.getCompanyName());
+        expectedContact.setCompanyName(addContact.addCompanyName(expectedContact.getCompanyName()));
     }
 
     @When("I fill in Add Contacts Modal with invalid phone number {string}")
     public void i_fill_in_Add_Contacts_Modal_with_invalid_phone_number(String invalidPhone) throws Exception {
         // Full Name
-        addContact.fillTxt_fullName().sendKeys(expectedContact.getNameValue());
+        addContact.fillTxt_fullName().sendKeys(nameValue);
 
         //Primary Invalid Phone Number
         common.waitAndSendText(10, addContact.fillTxt_primaryPhoneNumber(), invalidPhone);
@@ -281,10 +280,10 @@ public class AddContactSteps extends BasePage {
     @When("I fill in Add Contacts Modal with invalid email {string}")
     public void i_fill_in_Add_Contacts_Modal_with_invalid_primary_email(String invalidEmail) throws Exception {
         // Full Name
-        addContact.fillTxt_fullName().sendKeys(expectedContact.getNameValue());
+        addContact.fillTxt_fullName().sendKeys(nameValue);
 
         //Primary Invalid Email Address
-        addContact.fillTxt_primaryPhoneNumber().sendKeys(invalidEmail);
+        addContact.fillTxt_primaryEmail().sendKeys(invalidEmail);
     }
 
     @Then("I verify that email is invalid")
@@ -297,11 +296,6 @@ public class AddContactSteps extends BasePage {
     public void i_verify_that_phone_is_invalid () throws Exception{
         Thread.sleep(1000);
         addContact.verifyInvalidPhone();
-    }
-
-    @When("^I select a company name")
-    public void i_select_a_company_name() {
-        addContact.addCompanyName(expectedContact.getCompanyName());
     }
 
     @When("^I enter a job title$")
@@ -329,13 +323,15 @@ public class AddContactSteps extends BasePage {
         expectedContact.setBirthday(birthday);
     }
 
+
+
     @Then("I verify contact data")
     public void i_verify_contact_data() {
         Contacts actualContacts = ContactsDetailPage.getContactData();
         assertReflectionEquals(expectedContact, actualContacts);
     }
 
-    @And("I archive the contact")
+    @When("I archive the contact")
     public void i_archive_the_contact() {
         ContactsDetailPage.getArchiveIcon();
     }

@@ -17,6 +17,7 @@ import com.kwri.auto.ui.methods.Common;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 
 public class AddContactModal extends BasePage {
@@ -155,6 +156,12 @@ public class AddContactModal extends BasePage {
 	@FindBy(xpath = "//*[@id='about-section-v2']/div[6]/div[1]/div/div/div/div/div[1]/div[2]/div/input")
 	private WebElement inputCompName;
 
+	@FindBy(xpath = "//*[@id='about-section-v2']/div[6]/div[1]/div/div/input")
+	private WebElement txtCompanyName;
+
+	@FindBy(xpath = "//*[@id='about-section-v2']/div[6]/div[1]/div/div/div/div/div[1]/div[1]")
+	private WebElement txtSelectedCompany;
+
 	@FindBy(xpath = "//*[@id='about-section-v2']/div[6]/div[1]/div/div/div/div[2]/div/div/div")
 	private WebElement btn_CreateCompany;
 
@@ -175,7 +182,7 @@ public class AddContactModal extends BasePage {
 
 	private static final String relatName = "//*[@id='about-section-v2']/div[5]/div/div/div[1]/div/div/div[2]/div/div[1]/div/div[2]/div/div[contains(text(), '%s')]";
 
-	private static final String selectCompanyName = "//div[@id='about-section-v2']/div[6]/div/div/div/div/div[2]/div/div[text()='%s']";
+	private static final String selectCompanyName = "//div[@id='about-section-v2']/div[6]/div/div/div/div/div[2]/div/div[contains(text(), '%s')]";
 
 	private static final String select_primaryAddress = "(//div[contains(text(),'%s')])[1]";
 
@@ -305,6 +312,7 @@ public class AddContactModal extends BasePage {
 	}
 
 	public WebElement txtInputRelation() {
+		common.waitForElement(30, inputRelation);
 		return inputRelation;
 	}
 
@@ -433,38 +441,40 @@ public class AddContactModal extends BasePage {
 		}
 	}
 
-	public void addCompanyName(String company) {
+	public String addCompanyName(String company) {
 		txtCompanyName().click();
 		wait.until(ExpectedConditions.elementToBeClickable(txtCompanyName()));
 		txtCompanyName().sendKeys(company);
 		waitCompaniesLoading();
 
+		String companyName;
 		if(!(getFirstCompElement().getText().equals("Create Company"))) {
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(selectCompanyName, company)))).click();
+			companyName = txtSelectedCompany.getText();
 		} else {
 			btn_CreateCompany.click();
+			companyName = company;
 		}
+		return companyName;
 	}
 
-	public void setRelationship(String relationName){
+	public String setRelationship(String relationName){
 		contactsHome.scrollElementIntoView(selectRelation());
 		selectRelation().click();
 		wait.until(ExpectedConditions.elementToBeClickable(txtInputRelation()));
 		txtInputRelation().sendKeys(relationName);
 		waitContactsLoading();
 
-			if (!(getFirstElement().getText().equals("No options"))) {
-				//Relation does not exist
-				wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(relatName, relationName)))).click();
-			}
-			else {
-				btn_AddRelationships.click();
-			}
-	}
-
-	public String getTxtRelationName() {
-		common.waitForElement(30, txt_RealtionName);
-		return txt_RealtionName.getText();
+		String Relationships;
+		if (!(getFirstElement().getText().equals("No options"))) {
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(relatName, relationName)))).click();
+			Relationships = txt_RealtionName.getText();
+		}
+		else {
+			btn_AddRelationships.click();
+			Relationships = relationName;
+		}
+		return Relationships;
 	}
 
 	public void setDescription(String description){

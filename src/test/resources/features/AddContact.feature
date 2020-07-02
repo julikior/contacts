@@ -12,7 +12,7 @@ Feature: Contact Management - Create a new contact
     And I click on 'Save Contact' button
     Then I verify that the a new contact is added "true" to the contact list
     And I select a contact 'AutoUser' to see contact details
-    Then I verify contact data
+    And I archive the contact
     And I log out of Console
 
   @BackOutOfContactCreation  @COM-11780
@@ -21,6 +21,7 @@ Feature: Contact Management - Create a new contact
     And Enter details on add new contact form
     And I click on 'Cancel' button
     Then I verify that the a new contact is added "false" to the contact list
+    And I archive the contact
     And I log out of Console
 
   @AddContactWithAllFields @COM-11777
@@ -41,9 +42,9 @@ Feature: Contact Management - Create a new contact
     And I log out of Console
 
     Examples:
-      | PhoneNumber  |  AdditionalPhone | PrimaryAddress        | ApartmentNum | LegalName          | Description                 | JobTitle  | RelationName    | CompanyName |
-      |  2818181011  |  2818181012      | 311 California Street | 201          | AutoUser LegalName | Contact background info...  | Engineer  | TestSpouse      | New Company |
-      |  2818181013  |  2818181014      | 27 Merry Lane         | -            | Auto2 LName        | Contact info in description | CO        | McDonald        | Coffee      |
+      | PhoneNumber  |  AdditionalPhone | PrimaryAddress        | ApartmentNum | LegalName          | Description                 | JobTitle  | RelationName    | CompanyName     |
+      |  2818181011  |  2818181012      | 311 California Street | 201          | AutoUser LegalName | Contact background info...  | Engineer  | Spouse 1        | Company Juli    |
+      #|  2818181013  |  2818181014      | 27 Merry Lane         | -            | Auto2 LName        | Contact info in description | CO        | McDonald        | Coffee          |
 
   @AddContactWithInvalidEmail @COM-11764
   Scenario Outline: Create a new contact with invalid email
